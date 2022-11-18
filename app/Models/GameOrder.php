@@ -23,6 +23,6 @@ class Item extends Model
   }
 
   public function cart() {
-    return $this->belongsTo('App\Models\ShoppingCart');
+    return $this->belongsTo('App\Models\ShoppingCart', 'userID', 'gameID');
   }
 }

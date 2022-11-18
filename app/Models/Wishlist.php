@@ -19,7 +19,7 @@ class Wishlist extends Model
   ];
 
   public function user() {
-    return $this->belongsTo('App\Models\User');  
+    return $this->belongsTo('App\Models\User', 'userID');  
   }
 
   /*
@@ -30,7 +30,7 @@ class Wishlist extends Model
   */
 
   public function game() {
-    return $this->belongsTo('App\Models\Game');  
+    return $this->belongsTo('App\Models\Game', 'gameID');  
   }
 
 }

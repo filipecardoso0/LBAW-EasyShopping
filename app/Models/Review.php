@@ -19,11 +19,11 @@ class Review extends Model
   ];
 
     public function reviewUser() {
-        return $this->belongsTo('App\Models\User');  
+        return $this->belongsTo('App\Models\User', 'userID');  
     }
 
     public function game() {
-        return $this->belongsTo('App\Models\Game');  
+        return $this->belongsTo('App\Models\Game', 'gameID');  
     }
 
     /*

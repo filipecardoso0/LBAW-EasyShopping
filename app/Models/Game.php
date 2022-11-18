@@ -30,7 +30,7 @@ class Item extends Model
   ];
 
   public function reviews() {
-    return $this->hasMany('App\Models\Review');  
+    return $this->hasMany('App\Models\Review', 'userID');  
   }
 
   public function wishlists() {
@@ -56,7 +56,7 @@ class Item extends Model
   }
 
   public function categories() {
-    return $this->begongsToMany('App\Models\Category');  
+    return $this->begongsToMany('App\Models\Category', 'categoryID');  
   }
  
 }

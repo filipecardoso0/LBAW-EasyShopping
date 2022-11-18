@@ -20,11 +20,11 @@ class Item extends Model
     ];
 
   public function user() {
-      return $this->belongsTo('App\Models\User');
+      return $this->belongsTo('App\Models\User', 'userID');
   }
 
   public function games() {
-    return $this->belongsToMany('App\Models\Game');  
+    return $this->belongsToMany('App\Models\Game', 'gameID');  
   }
 
   public function gameOrder() {
