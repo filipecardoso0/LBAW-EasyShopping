@@ -29,46 +29,54 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
-        'banned', 'userID',
+        'banned',
     ];
 
-    /**
-     * The notifications this user belongs to.
-     */
-    public function userNotifications() {
-        return $this->belongsToMany('App\Models\Notification');
-    }
-      
-    /**
-     * The wishlist this user has.
-     */
-     public function userWishlist() {
-        return $this->hasOne('App\Models\Wishlist');
-    }
-
-    /**
-     * The orders this user owns.
-     */
-    public function userOrders() {
-        return $this->hasMany('App\Models\Order');
+    public function userCarts() {
+        return $this->hasMany('App\Models\ShoppingCart');  
     }
     
-    /**
-     * The shopping carts this user owns.
-     */
-    public function userCarts() {
-        return $this->hasMany('App\Models\ShoppingCart');
+    /*
+    User -> Administrator
+    public function () {
+        return $this->belongsTo('App\Models\User');
+    }
+    */
+
+    public function reviews() {
+        return $this->hasMany('App\Models\Review');  
     }
 
-    /**
-     * The reviews carts this user owns.
-     */
-    public function publishedReviews() {
-        return $this->hasMany('App\Models\Review');
+    public function wishlist() {
+        return $this->hasOne('App\Models\Wishlist');  
     }
 
-    // User * -> Administrator 1 (banned)
-    // GamePublisher 1 -> Game 1 (PublishedGame)
-    // Administrator 0..1 -> Game * (Approved)
-    // Administrator 1 -> Order * (ChangeState)
+    public function orders() {
+        return $this->hasMany('App\Models\Order');  
+    }
+
+    public function notifications() {
+        return $this->belongsToMany('App\Models\Notification');  
+    }
+
+    /*
+    Administrator
+    public function orders() {
+        return $this->hasMany('App\Models\Order');
+    }
+    */
+
+    /*
+    Administrator
+    public function games() {
+        return $this->hasMany('App\Models\Game');
+    }
+    */
+
+    /*
+    GamePublisher
+    public function game() {
+        return $this->hasOne('App\Models\Game');
+    }
+    */
 }

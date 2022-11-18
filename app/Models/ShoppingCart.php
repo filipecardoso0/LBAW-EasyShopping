@@ -19,12 +19,15 @@ class Item extends Model
       'value', 'order_date',
     ];
 
-  /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-      'gameID', 'userID',
-  ];
+  public function user() {
+      return $this->belongsTo('App\Models\User');
+  }
+
+  public function games() {
+    return $this->belongsToMany('App\Models\Game');  
+  }
+
+  public function gameOrder() {
+    return $this->hasOne('App\Models\GameOrder');  
+  }
 }

@@ -18,12 +18,7 @@ class Item extends Model
       'price',  
     ];
 
-  /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-      'gameID', 'userID', 
-  ];
+  public function categoryGame() {
+    return $this->belongsToMany('App\Models\Game');
+  }
 }

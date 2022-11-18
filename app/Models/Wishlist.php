@@ -18,12 +18,19 @@ class Wishlist extends Model
       'game_price', 
   ];
 
-  /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-      'userID', 'gameID',
-  ];
+  public function user() {
+    return $this->belongsTo('App\Models\User');  
+  }
+
+  /*
+  NotifyWishlist
+  public function notification() {
+    return $this->hasOne('App\Models\Notification');  
+  }
+  */
+
+  public function game() {
+    return $this->belongsTo('App\Models\Game');  
+  }
+
 }

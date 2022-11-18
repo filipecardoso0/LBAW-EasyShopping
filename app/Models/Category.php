@@ -9,7 +9,7 @@ class Category extends Model
     // Don't add create and update timestamps in database.
   public $timestamps  = false;
 
-  /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -18,12 +18,7 @@ class Category extends Model
       'name',
   ];
 
-  /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'categoryID ',
-    ];
+  public function userNotifications() {
+    return $this->belongsToMany('App\Models\Notification');
+  }
 }

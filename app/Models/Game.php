@@ -26,14 +26,37 @@ class Item extends Model
      * @var array
      */
     protected $hidden = [
-      'gameID', 'userID', 
-      'categoryID', 'approved',
+      'approved',
   ];
 
-  /**
-   * The card this item belongs to.
-   */
-  public function card() {
-    return $this->belongsTo('App\Models\Card');
+  public function reviews() {
+    return $this->hasMany('App\Models\Review');  
   }
+
+  public function wishlists() {
+    return $this->hasMany('App\Models\Wishlist');  
+  }
+
+  /*
+  GamePublisher
+  public function user() {
+    return $this->belongsTo('App\Models\User');  
+  }
+  */
+
+  /*
+  Administrator
+  public function user() {
+    return $this->belongsTo('App\Models\User');  
+  }
+  */
+
+  public function carts() {
+    return $this->begongsToMany('App\Models\ShoppingCart');  
+  }
+
+  public function categories() {
+    return $this->begongsToMany('App\Models\Category');  
+  }
+ 
 }

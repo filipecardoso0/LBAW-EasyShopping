@@ -18,13 +18,18 @@ class Review extends Model
       'date', 'comment', 'rating',
   ];
 
-  /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'reviewID ', 'userID',
-        'gameID',
-    ];
+    public function reviewUser() {
+        return $this->belongsTo('App\Models\User');  
+    }
+
+    public function game() {
+        return $this->belongsTo('App\Models\Game');  
+    }
+
+    /*
+    NotifyReview
+    public functionnotifications() {
+        return $this->balongsToMany('App\Models\Notification');  
+    }
+    */
 }
