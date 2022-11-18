@@ -18,10 +18,21 @@ class Item extends Model
       'read_status', 'notification_type', 
   ];
 
-  /**
-   * The card this item belongs to.
-   */
   public function users() {
     return $this->belongsToMany('App\Models\User');
   }
+
+  /*
+  NotifyWishlist
+    public function wishlists() {
+    return $this->belongsToMany('App\Models\Wishlist');
+  }
+  */
+
+  /*
+  NotifyReview
+    public function reviews() {
+    return $this->belongsToMany('App\Models\Review');
+  }
+  */
 }

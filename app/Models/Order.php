@@ -25,7 +25,21 @@ class Order extends Model
      * @var array
      */
     protected $hidden = [
-      'gameID', 'userID', 
-      'categoryID', 'approved',
+      'approved',
   ];
+
+  public function user() {
+    return $this->belongsTo('App\Models\User');
+  }
+
+  public function gameOrder() {
+    return $this->hasMany('App\Models\GameOrder');
+  }
+
+  /*
+  Admnistrator
+  public function administrator() {
+    return $this->belongsTo('App\Models\User');
+  }
+  */
 }

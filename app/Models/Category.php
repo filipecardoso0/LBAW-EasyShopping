@@ -18,7 +18,7 @@ class Category extends Model
       'name',
   ];
 
-  public function userNotifications() {
-    return $this->belongsToMany('App\Models\Notification');
+  public function games() {
+    return $this->belongsToMany('App\Models\Game');
   }
 }

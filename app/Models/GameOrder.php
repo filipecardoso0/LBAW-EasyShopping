@@ -18,7 +18,11 @@ class Item extends Model
       'price',  
     ];
 
-  public function categoryGame() {
-    return $this->belongsToMany('App\Models\Game');
+  public function order() {
+    return $this->belongsTo('App\Models\Order');
+  }
+
+  public function cart() {
+    return $this->belongsTo('App\Models\ShoppingCart');
   }
 }
