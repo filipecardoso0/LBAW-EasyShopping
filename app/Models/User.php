@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'email', 'username', 
+        'user_type', 'publisher_name',  
     ];
 
     /**
@@ -28,12 +29,46 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password', 'remember_token',
+        'banned', 'userID',
     ];
 
     /**
-     * The cards this user owns.
+     * The notifications this user belongs to.
      */
-     public function cards() {
-      return $this->hasMany('App\Models\Card');
+    public function userNotifications() {
+        return $this->belongsToMany('App\Models\Notification');
     }
+      
+    /**
+     * The wishlist this user has.
+     */
+     public function userWishlist() {
+        return $this->hasOne('App\Models\Wishlist');
+    }
+
+    /**
+     * The orders this user owns.
+     */
+    public function userOrders() {
+        return $this->hasMany('App\Models\Order');
+    }
+    
+    /**
+     * The shopping carts this user owns.
+     */
+    public function userCarts() {
+        return $this->hasMany('App\Models\ShoppingCart');
+    }
+
+    /**
+     * The reviews carts this user owns.
+     */
+    public function publishedReviews() {
+        return $this->hasMany('App\Models\Review');
+    }
+
+    // User * -> Administrator 1 (banned)
+    // GamePublisher 1 -> Game 1 (PublishedGame)
+    // Administrator 0..1 -> Game * (Approved)
+    // Administrator 1 -> Order * (ChangeState)
 }

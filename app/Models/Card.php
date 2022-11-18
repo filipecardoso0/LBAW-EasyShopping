@@ -19,7 +19,7 @@ class Card extends Model
   /**
    * Items inside this card
    */
-  public function items() {
-    return $this->hasMany('App\Models\Item');
+  public function games() {
+    return $this->hasMany('App\Models\Game');
   }
 }
