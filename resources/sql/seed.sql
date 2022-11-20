@@ -19,9 +19,10 @@ CREATE TABLE users (
 	email TEXT UNIQUE NOT NULL,
 	username TEXT UNIQUE NOT NULL,
 	password TEXT NOT NULL,
-	type user_type,
+	type user_type DEFAULT 'AuthUser' NOT NULL,
 	publisher_name TEXT DEFAULT NULL,
-	banned BOOLEAN DEFAULT false NOT NULL
+	banned BOOLEAN DEFAULT false NOT NULL,
+	remember_token TEXT
 );
 
 
@@ -85,7 +86,7 @@ CREATE TABLE game_order (
 
 CREATE TABLE notification(
         notificationID SERIAL PRIMARY KEY,
-		userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE, 
+		userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE,
         read_status BOOLEAN DEFAULT false NOT NULL,
         type notification_type
 );
@@ -139,152 +140,152 @@ CREATE INDEX search_idx ON game USING GIN (tsvectors);
 
 -- Sends a notification to the user that is the gamepublisher of the game reviewed
 CREATE OR REPLACE FUNCTION notifyReview()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-	userIdentifier int; 
+RETURNS TRIGGER AS
+$$
+DECLARE
+	userIdentifier int;
 BEGIN
 	userIdentifier = (Select userID from game Where NEW.gameID=gameID);
 	INSERT INTO notification VALUES (DEFAULT, userIdentifier, false, 'Reviewed');
 	RETURN NEW;
-END; 
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS notify_review ON review;
 CREATE TRIGGER notify_review
 AFTER INSERT ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE notifyReview(); 
+FOR EACH ROW
+EXECUTE PROCEDURE notifyReview();
 
 -- Sends a notification to the user that the game on his wishlist is now on sale
 CREATE OR REPLACE FUNCTION notifyWishlist()
-RETURNS TRIGGER AS 
-$$ 
+RETURNS TRIGGER AS
+$$
 BEGIN
-    IF EXISTS (Select gameID from game WHERE OLD.discount < NEW.discount AND OLD.gameID = NEW.gameID) THEN 
-		INSERT INTO notification (userid, read_status, type) 
+    IF EXISTS (Select gameID from game WHERE OLD.discount < NEW.discount AND OLD.gameID = NEW.gameID) THEN
+		INSERT INTO notification (userid, read_status, type)
 		(SELECT userid, 'false', 'Wishlist' FROM wishlist WHERE gameid = NEW.gameID);
-	END IF; 
-    RETURN NEW; 
-END; 
+	END IF;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS notify_wishlist ON game;
 CREATE TRIGGER notify_wishlist
 BEFORE UPDATE ON game
-FOR EACH ROW 
-EXECUTE PROCEDURE notifyWishlist(); 
+FOR EACH ROW
+EXECUTE PROCEDURE notifyWishlist();
 
 
 -- It is not possible to review a game that hasn't been launched yet
 CREATE OR REPLACE FUNCTION reviewnotLaunched()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-    gamedate TIMESTAMP WITH TIME ZONE; 
+RETURNS TRIGGER AS
+$$
+DECLARE
+    gamedate TIMESTAMP WITH TIME ZONE;
 BEGIN
-    gamedate = (SELECT release_date FROM game WHERE NEW.gameID = gameID); 
-    IF EXISTS (SELECT * FROM review WHERE NEW.date < gamedate) THEN 
+    gamedate = (SELECT release_date FROM game WHERE NEW.gameID = gameID);
+    IF EXISTS (SELECT * FROM review WHERE NEW.date < gamedate) THEN
         RAISE EXCEPTION 'A game can only be reviewed after it has been launched.';
-    END IF; 
-    RETURN NEW; 
-END; 
+    END IF;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS review_notlaunched ON review;
 CREATE TRIGGER review_notlaunched
 BEFORE INSERT ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE reviewnotLaunched(); 
+FOR EACH ROW
+EXECUTE PROCEDURE reviewnotLaunched();
 
 -- A publisher cannot review his published games
 CREATE OR REPLACE FUNCTION reviewPublishedGame()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-BEGIN 
-    IF EXISTS (SELECT * FROM game WHERE NEW.gameID = gameID AND NEW.userID = userID) THEN 
+RETURNS TRIGGER AS
+$$
+DECLARE
+BEGIN
+    IF EXISTS (SELECT * FROM game WHERE NEW.gameID = gameID AND NEW.userID = userID) THEN
         RAISE EXCEPTION 'A game cannot be reviewed by its publisher.';
-    END IF; 
-    RETURN NEW; 
-END; 
+    END IF;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS review_publishedgame ON review;
 CREATE TRIGGER review_publishedgame
 BEFORE INSERT ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE reviewPublishedGame(); 
+FOR EACH ROW
+EXECUTE PROCEDURE reviewPublishedGame();
 
 
--- It is not possible to review a game that the user hasn't been bought yet 
+-- It is not possible to review a game that the user hasn't been bought yet
 CREATE OR REPLACE FUNCTION reviewNotBought()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-    orderstate BOOLEAN; 
+RETURNS TRIGGER AS
+$$
+DECLARE
+    orderstate BOOLEAN;
 BEGIN
-    orderstate = (SELECT state FROM order_ WHERE NEW.gameID = gameID AND NEW.userID = userID); 
-    IF orderstate = true THEN 
-  		RETURN NEW; 
+    orderstate = (SELECT state FROM order_ WHERE NEW.gameID = gameID AND NEW.userID = userID);
+    IF orderstate = true THEN
+  		RETURN NEW;
     ELSE
 		RAISE EXCEPTION 'A game can only be reviewed after it has been purchased.';
-	END IF; 
-    RETURN NEW; 
-END; 
+	END IF;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS review_notbought ON review;
 CREATE TRIGGER review_notbought
 BEFORE INSERT ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE reviewNotBought(); 
+FOR EACH ROW
+EXECUTE PROCEDURE reviewNotBought();
 
 
 -- When a new review on a certain game is posted the game classification is updated
 CREATE OR REPLACE FUNCTION updateClassification()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-    newavgreview int; 
+RETURNS TRIGGER AS
+$$
+DECLARE
+    newavgreview int;
 BEGIN
-    newavgreview = (Select AVG(rating) FROM review Where NEW.gameID = gameID); 
-    UPDATE game SET classification = newavgreview Where NEW.gameID = gameID; 
-    RETURN NEW; 
-END; 
+    newavgreview = (Select AVG(rating) FROM review Where NEW.gameID = gameID);
+    UPDATE game SET classification = newavgreview Where NEW.gameID = gameID;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_classification ON review;
 CREATE TRIGGER update_classification
 AFTER INSERT ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE updateClassification(); 
+FOR EACH ROW
+EXECUTE PROCEDURE updateClassification();
 
 -- When a review on a certain game is deleted the game classification is updated
 CREATE OR REPLACE FUNCTION updateRemovedClassification()
-RETURNS TRIGGER AS 
-$$ 
-DECLARE 
-    newavgreview int; 
+RETURNS TRIGGER AS
+$$
+DECLARE
+    newavgreview int;
 BEGIN
-    newavgreview = (Select AVG(rating) FROM review Where OLD.gameID = gameID); 
-    UPDATE game SET classification = newavgreview Where OLD.gameID = gameID; 
-    RETURN NEW; 
-END; 
+    newavgreview = (Select AVG(rating) FROM review Where OLD.gameID = gameID);
+    UPDATE game SET classification = newavgreview Where OLD.gameID = gameID;
+    RETURN NEW;
+END;
 $$
 LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS update_removedclassification ON review;
 CREATE TRIGGER update_removedclassification
 AFTER DELETE ON review
-FOR EACH ROW 
-EXECUTE PROCEDURE updateRemovedClassification(); 
+FOR EACH ROW
+EXECUTE PROCEDURE updateRemovedClassification();
 
 -----------------------------------------
 -- Transactions
@@ -293,28 +294,28 @@ EXECUTE PROCEDURE updateRemovedClassification();
 --Adds a product and its info to a given user shopping cart
 CREATE OR REPLACE FUNCTION addProductToShoppingCart(userIdentifier int, gameIdentifier int)
 returns void
-as 
+as
 $$
-DECLARE 
-	gameprice int; 
-BEGIN 		
-	gameprice = (Select price FROM game Where gameId = gameIdentifier);  
-	INSERT INTO shopping_cart VALUES(userIdentifier, gameIdentifier, gameprice); 
-END; 
+DECLARE
+	gameprice int;
+BEGIN
+	gameprice = (Select price FROM game Where gameId = gameIdentifier);
+	INSERT INTO shopping_cart VALUES(userIdentifier, gameIdentifier, gameprice);
+END;
 $$
 language plpgsql;
 
 --Adds user games on shopping_cart and its prices to the table responsible for the checkout
 CREATE OR REPLACE FUNCTION transGameToCheckout(userIdentifier int)
 returns void
-as 
+as
 $$
-BEGIN 
-	INSERT INTO game_order (userid, gameID, price) 
+BEGIN
+	INSERT INTO game_order (userid, gameID, price)
 	(SELECT userid, gameID, game_price FROM shopping_cart WHERE userID = userIdentifier);
 	-- Deletes games from shopping cart
-	DELETE FROM shopping_cart WHERE userID = userIdentifier; 
-END; 
+	DELETE FROM shopping_cart WHERE userID = userIdentifier;
+END;
 $$
 language plpgsql;
 

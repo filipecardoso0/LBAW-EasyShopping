@@ -14,14 +14,16 @@ class User extends Authenticatable
     // Don't add create and update timestamps in database.
     public $timestamps  = false;
 
+    protected $primaryKey = 'userid'; //Overrides id as default primary key
+
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'email', 'username', 
-        'user_type', 'publisher_name',  
+        'email', 'username', 'password'
     ];
 
     /**
@@ -30,14 +32,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
-        'banned',
+        'remember_token',
     ];
 
     public function userCarts() {
-        return $this->hasMany('App\Models\ShoppingCart');  
+        return $this->hasMany('App\Models\ShoppingCart');
     }
-    
+
     /*
     User -> Administrator
     public function () {
@@ -46,19 +47,19 @@ class User extends Authenticatable
     */
 
     public function reviews() {
-        return $this->hasMany('App\Models\Review');  
+        return $this->hasMany('App\Models\Review');
     }
 
     public function wishlist() {
-        return $this->hasOne('App\Models\Wishlist');  
+        return $this->hasOne('App\Models\Wishlist');
     }
 
     public function orders() {
-        return $this->hasMany('App\Models\Order');  
+        return $this->hasMany('App\Models\Order');
     }
 
     public function notifications() {
-        return $this->belongsToMany('App\Models\Notification');  
+        return $this->belongsToMany('App\Models\Notification');
     }
 
     /*
