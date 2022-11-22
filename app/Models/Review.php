@@ -10,6 +10,13 @@ class Review extends Model
     // Don't add create and update timestamps in database.
   public $timestamps  = false;
 
+    /**
+     * The table associated with the model. (Overrides laravel's default naming convention)
+     *
+     * @var string
+     */
+    protected $table = 'review';
+
   /**
      * The attributes that are mass assignable.
      *
@@ -19,18 +26,18 @@ class Review extends Model
       'date', 'comment', 'rating',
   ];
 
-    public function reviewUser() {
-        return $this->belongsTo('App\Models\User', 'userID');  
+    public function user() {
+        return $this->belongsTo(User::Class, 'userid', 'userid');
     }
 
     public function game() {
-        return $this->belongsTo('App\Models\Game', 'gameID');  
+        return $this->belongsTo(Game::Class, 'gameid', 'gameid');
     }
 
     /*
     NotifyReview
     public functionnotifications() {
-        return $this->balongsToMany('App\Models\Notification');  
+        return $this->balongsToMany('App\Models\Notification');
     }
     */
 }

@@ -10,15 +10,25 @@ class Game extends Model
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
 
-  /**
+    /**
+     * The table associated with the model. (Overrides laravel's default naming convention)
+     *
+     * @var string
+     */
+    protected $table = 'game';
+
+    protected $primaryKey = 'gameid'; //Overrides laravel's default pk for game table
+
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-      'title', 'description', 'price',  
-      'release_date', 'classification', 
-      'discount', 
+      'title', 'description', 'price',
+      'release_date', 'classification',
+      'discount',
   ];
 
   /**
@@ -30,34 +40,34 @@ class Game extends Model
       'approved',
   ];
 
+  //Gets game reviews
   public function reviews() {
-    return $this->hasMany('App\Models\Review', 'userID');  
+    return $this->hasMany(Review::Class, 'gameid', 'gameid');
   }
 
   public function wishlists() {
-    return $this->hasMany('App\Models\Wishlist');  
+    return $this->hasMany('App\Models\Wishlist');
   }
 
-  /*
-  GamePublisher
+  /* GamePublisher */
   public function user() {
-    return $this->belongsTo('App\Models\User');  
+    return $this->belongsTo(User::Class, 'userid', 'userid');
   }
-  */
+
 
   /*
   Administrator
   public function user() {
-    return $this->belongsTo('App\Models\User');  
+    return $this->belongsTo('App\Models\User');
   }
   */
 
   public function carts() {
-    return $this->begongsToMany('App\Models\ShoppingCart');  
+    return $this->belongsToMany('App\Models\ShoppingCart');
   }
 
   public function categories() {
-    return $this->begongsToMany('App\Models\Category', 'categoryID');  
+    return $this->belongsToMany(Category::Class, 'categoryid', 'categoryid');
   }
- 
+
 }

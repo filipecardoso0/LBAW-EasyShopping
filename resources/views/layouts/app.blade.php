@@ -12,7 +12,9 @@
 
     <!-- Styles -->
    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- TailWind -->
-   <script type="text/javascript">
+   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> <!-- Font Awesome CDN -->
+
+      <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
     </script>
@@ -22,7 +24,7 @@
       <nav class="flex flex-col md:flex-row flex-wrap bg-gray-900 text-neutral-50 p-2 items-center justify-between">
           <section class="flex flex-wrap items-center space-x-4">
               <a class="font-normal text-md" href="{{ url('/') }}">Easy Shopping</a>
-              <a href="#"><img src="{{ url('/image/logo.png')}}" alt="Easy Shopping Logo Image" class="w-12 h-12"></a>
+              <a href="{{ url('/') }}"><img src="{{ url('/image/logo.png')}}" alt="Easy Shopping Logo Image" class="w-12 h-12"></a>
           </section>
 
           <ul class="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-x-0 space-y-2 font-normal text-md flex-wrap items-center">
@@ -52,7 +54,8 @@
         @yield('content')
       </section>
 
-      <footer class="fixed inset-x-0 bottom-0 flex flex-col md:flex-row font-normal text-sm text-neutral-50 bg-gray-900 items-center justify-between">
+      <!-- Navbar position property is fixed on medium to large screens in order to have it on the bottom of the screen. On mobile devices its position property is default (static)-->
+      <footer class="md:fixed static inset-x-0 bottom-0 flex flex-col md:flex-row font-normal text-sm text-neutral-50 bg-gray-900 items-center justify-between">
           <span class="md:ml-1 ml-0">
               <a href="#">Copyright &#169 Easy Shopping All Rights Reserved</a>
           </span>

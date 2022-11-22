@@ -7,8 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    /**
+     * The table associated with the model. (Overrides laravel's default naming convention)
+     *
+     * @var string
+     */
+    protected $table = 'category';
+
+
     // Don't add create and update timestamps in database.
-  public $timestamps  = false;
+    public $timestamps  = false;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +28,6 @@ class Category extends Model
   ];
 
   public function games() {
-    return $this->belongsToMany('App\Models\Game');
+    return $this->belongsToMany(Game::Class, 'gameid', 'gameid');
   }
 }

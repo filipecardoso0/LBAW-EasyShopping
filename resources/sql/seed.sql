@@ -100,11 +100,14 @@ CREATE INDEX user_notification ON notification USING hash (userID);
 CREATE INDEX user_game ON game USING btree (userID);
 CLUSTER game USING user_game;
 
+/* Disabled for now once it is causing errors on populate.sql
+
 -- FTS INDEXES
 ALTER TABLE game
 ADD COLUMN tsvectors TSVECTOR;
 
 -- Create a function to automatically update ts_vectors.
+
 CREATE FUNCTION game_search_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
@@ -133,6 +136,8 @@ CREATE TRIGGER game_search_update
 
 -- Finally, create a GIN index for ts_vectors.
 CREATE INDEX search_idx ON game USING GIN (tsvectors);
+
+ */
 
 -----------------------------------------
 -- TRIGGERS and UDFs

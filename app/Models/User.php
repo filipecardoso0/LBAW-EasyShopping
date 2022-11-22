@@ -76,10 +76,8 @@ class User extends Authenticatable
     }
     */
 
-    /*
-    GamePublisher
+    /* GamePublisher */
     public function game() {
-        return $this->hasOne('App\Models\Game');
+        return $this->hasMany(Game::Class, 'gameid', 'gameid');
     }
-    */
 }
