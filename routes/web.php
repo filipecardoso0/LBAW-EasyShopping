@@ -48,3 +48,12 @@ Route::get('details/{game_id}', 'GameController@index')->name('game');
 //Categories
 Route::get('categories', 'CategoryController@index')->name('categories');
 
+//Shopping Cart
+Route::get('cart', 'ShoppingCartController@index')->name('shoppingcart'); //View Contents
+Route::post('addtocart', 'ShoppingCartController@store')->name('addtocart'); //Store Cart Contents (Authenticated Only)
+Route::delete('removefromcart', 'ShoppingCartController@destroy')->name('removefromcart'); //Removes Cart Item (Authenticated Only)
+Route::get('addToCartGuest/{gameid}', 'ShoppingCartController@addToCartGuest')->name('addToCartGuest'); //Store Cart Contents (Guest Only)
+Route::get('removeFromCart/{gameid}', 'ShoppingCartController@removeFromCartGuest')->name('removeFromCartGuest'); //Removes Cart Item (Guest Only)
+
+//Checkout
+//Route::get('checkout', '')->name('checkout');

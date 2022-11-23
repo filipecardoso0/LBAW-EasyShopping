@@ -54,6 +54,12 @@ class Game extends Model
     return $this->belongsTo(User::Class, 'userid', 'userid');
   }
 
+  //Get GamePublisher through the gameid
+  public static function getOwnerNameByGameId(int $id){
+      $game = Game::find($id);
+      return $game->user->username;
+  }
+
 
   /*
   Administrator

@@ -29,7 +29,27 @@
 
           <ul class="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-x-0 space-y-2 font-normal text-md flex-wrap items-center">
               <li>
-                  <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="#">Shopping Cart</a>
+                  <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{  route('shoppingcart') }}"><i class="fa-solid fa-cart-shopping"></i>
+                      <span class="text-amber-400">
+                          @auth
+                              @if(\App\Models\ShoppingCart::userCartGamesCount()->count())
+                                  @if((\App\Models\ShoppingCart::userCartGamesCount()[0]->cartgamescount) > 0)
+                                      {{ (\App\Models\ShoppingCart::userCartGamesCount()[0]->cartgamescount) }}
+                                  @else
+                                      0
+                                  @endif
+                              @else
+                                  0
+                              @endif
+                          @endauth
+                          @guest
+                              @if (\Illuminate\Support\Facades\Session::has('shoppingcart'))
+                                  {{ \Illuminate\Support\Facades\Session::get('shoppingcart')->totalQuantity }}
+                              @else
+                                  0
+                              @endif
+                          @endguest
+                      </span> Shopping Cart</a>
               </li>
               @auth
                   <li>

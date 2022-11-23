@@ -12,6 +12,7 @@ class GameController extends Controller
     //TODO: FIX DATABASE CATEGORIES ERROR(GAMES CAN HAVE ONLY 1 CATEGORY)
     //TODO: CREATE THE NEW PRODUCT_CATEGORIES MODEL
     //TODO: Add Games Classification in a star manner
+    //TODO: PASSAR AS QUERIES PARA O CONTROLLER
 
     public function index(int $gameid){
         //Queries the database in order to obtain game info of the given gameid

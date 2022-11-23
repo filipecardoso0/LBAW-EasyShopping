@@ -11,10 +11,22 @@
                 <p class="text-neutral-50">Classification</p>
                 <p class="text-amber-400 font-semibold">Categories/Category:</p> <!--Usar aquela cena da gramatica que o meu menino mostra no crash course de laravel-->
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->username }}</span></p>
-                <div class="mt-6 space-x-4">
-                    <a href="#" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2">Add to Cart</a>
-                    <a href="#" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2">Add to Wishlist</a>
-                </div>
+                <section class="flex flex-row mt-6 space-x-4">
+                    @auth
+                    <form method="post" action="{{ route('addtocart') }}">
+                        @csrf
+                        <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="submit" name="gameid" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                    </form>
+                    <form action="#" method="POST">
+                        @csrf
+                        <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="submit"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>
+                    </form>
+                    @endauth
+                    @guest
+                        <a href="{{ route('addToCartGuest', $game->gameid) }}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</a>
+                        <a href="#" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-heart"></i> Add to Wishlist</a>
+                    @endguest
+                </section>
             </article>
             <div>
                 <p class="md:ml-16 ml-4 md:mt-8 mt-4 md:bg-amber-400 lg:px-16 lg:py-3 md:px-8 md:py-2 text-neutral-50 font-semibold text-xl">{{$game->price-($game->price*$game->discount)}} &euro;</p>
@@ -26,7 +38,7 @@
                 {{ $game->description }}
             </p>
         </section>
-        <section class="m-4">
+        <section class="mr-4 ml-4 mt-4 mb-8">
             <h4 class="font-semibold text-neutral-50 text-lg underline">Comments:</h4>
             @if($game->reviews->count())
                 @foreach($game->reviews as $review)
