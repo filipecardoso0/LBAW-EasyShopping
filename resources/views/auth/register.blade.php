@@ -1,39 +1,38 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
-    {{ csrf_field() }}
+<form class="flex flex-col items-center justify-center h-screen text-neutral-50 bg-gray-800 text-md font-semibold" method="post" action="{{ url('register') }}">
+    @csrf
 
-    <label for="name">Name</label>
-    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
-    @if ($errors->has('name'))
-      <span class="error">
-          {{ $errors->first('name') }}
+    <!-- Errors -->
+    @if ($errors->has('username'))
+        <span class="mb-4 text-amber-400 text-xl">
+          {{ $errors->first('username') }}
       </span>
     @endif
 
-    <label for="email">E-Mail Address</label>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
     @if ($errors->has('email'))
-      <span class="error">
+        <span class="mb-4 text-amber-400 text-xl">
           {{ $errors->first('email') }}
       </span>
     @endif
 
-    <label for="password">Password</label>
-    <input id="password" type="password" name="password" required>
     @if ($errors->has('password'))
-      <span class="error">
+        <span class="mb-4 text-amber-400 text-xl">
           {{ $errors->first('password') }}
       </span>
     @endif
 
-    <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
+    <section class="flex flex-col mb-5">
+        <p class="text-xl text-center mb-4">CREATE AN ACCOUNT</p>
+        <p class="text-xl text-center">Already have one?<span><a class="text-amber-400 ml-1" href="{{ route('login') }}">Login</a></span></p>
+    </section>
 
-    <button type="submit">
-      Register
-    </button>
-    <a class="button button-outline" href="{{ route('login') }}">Login</a>
+    <input name="username" value="{{ old('username') }}" class="text-black mt-4 p-2 rounded-lg focus:outline-none focus:border-amber-400 focus:border-2" type="text" placeholder="Username" required autofocus>
+    <input name="email" value="{{ old('email') }}" class="text-black mt-4 p-2 rounded-lg focus:outline-none focus:border-amber-400 focus:border-2" type="email" placeholder="Email Address" required>
+    <input name="password" class="text-black mt-4 p-2 rounded-lg focus:outline-none focus:border-amber-400 focus:border-2" type="password" placeholder="Password" required>
+    <input name="password_confirmation" class="text-black mt-4 p-2 rounded-lg focus:outline-none focus:border-amber-400 focus:border-2" type="password" placeholder="Confirm Password" required>
+
+    <button class="bg-amber-400 rounded-md border-none px-5 py-3 text-black mt-5 hover:text-neutral-50" type="submit">Register</button>
 </form>
 @endsection
