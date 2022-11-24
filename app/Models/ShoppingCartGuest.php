@@ -16,12 +16,14 @@ class ShoppingCartGuest extends Model
     public $items = [];
     public $totalQuantity = 0;
     public $totalPrice = 0;
+    public $gameids = [];
 
     public function __construct($oldCart){
         if($oldCart){
             $this->items = $oldCart->items;
             $this->totalQuantity = $oldCart->totalQuantity;
             $this->totalPrice = $oldCart->totalPrice;
+            $this->gameids = $oldCart->gameids;
         }
     }
 
@@ -36,12 +38,12 @@ class ShoppingCartGuest extends Model
                     //Send back message error
                     return;
                 }
-                $id++;
             }
         }
 
         $finalprice = $game->price-($game->price*$game->discount);
         array_push($this->items, $game);
+        array_push($this->gameids, $game->gameid);
         $this->totalQuantity++;
         $this->totalPrice += $finalprice;
     }
@@ -49,16 +51,30 @@ class ShoppingCartGuest extends Model
     //Removes Items from Cart
     public function removeItemFromCart($game){
         //Asserts if shopping cart is not empty
-        $id = 0;
+        $cntr = 0;
         $found = false;
         if($this->items){
             foreach($this->items as $item){
                 if($item->gameid == $game->gameid){
                     //Game exists
-                    unset($this->items[$id]);
+                    unset($this->items[$cntr]);
+                    $this->items = array_values($this->items); //Reorders indexes again
                     $found = true;
+                    break;
                 }
-                $id++;
+                $cntr++;
+            }
+            $cntr1 = 0;
+            if($found){
+                foreach($this->gameids as $gameid){
+                    if($gameid == $game->gameid){
+                        //Remove the game id from the game id array
+                        unset($this->gameids[$cntr1]);
+                        $this->gameids = array_values($this->gameids); //Reorders indexes again
+                        break;
+                    }
+                    $cntr1++;
+                }
             }
         }
 

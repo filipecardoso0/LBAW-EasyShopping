@@ -54,6 +54,7 @@ Route::post('addtocart', 'ShoppingCartController@store')->name('addtocart'); //S
 Route::delete('removefromcart', 'ShoppingCartController@destroy')->name('removefromcart'); //Removes Cart Item (Authenticated Only)
 Route::get('addToCartGuest/{gameid}', 'ShoppingCartController@addToCartGuest')->name('addToCartGuest'); //Store Cart Contents (Guest Only)
 Route::get('removeFromCart/{gameid}', 'ShoppingCartController@removeFromCartGuest')->name('removeFromCartGuest'); //Removes Cart Item (Guest Only)
+Route::get('guestCheckout', 'ShoppingCartController@guestItemstoCookie')->name('guestCheckout'); //Adds session cart items to a cookie in order to store this values temporarily
 
 //Checkout
 //Route::get('checkout', '')->name('checkout');

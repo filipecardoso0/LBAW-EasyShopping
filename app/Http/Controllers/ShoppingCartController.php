@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\ShoppingCart;
 use App\Models\ShoppingCartGuest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
 class ShoppingCartController extends Controller
@@ -88,7 +89,6 @@ class ShoppingCartController extends Controller
         if($request->session()->has('shoppingcart')){
             $oldcart = $request->session()->get('shoppingcart');
         }
-
         //Shopping Cart does not exist, so it makes no sense to remove a game
         else
             return back();
@@ -108,5 +108,34 @@ class ShoppingCartController extends Controller
         return back();
     }
 
+    /*
+     * IMPORTANT -> WHEN USER LOGS IN THE SESSION CHANGES, SO ALL THE ITEMS IN THE SHOPPING CART WILL BE LOST
+     * SO, IN ORDER TO MAINTAIN THE TRACK OF THE ITEMS THE USER HAD ADDED TO HIS SHOPPING CART WE ARE GOING TO USE COOKIES
+     */
+
+    //When guest presses checkout we are going to temporarily store the session cart items in a cookie
+    //And then move to log in view
+    public function guestItemstoCookie(Request $request){
+
+        //Verify if is not empty
+        if($request->session()->has('shoppingcart')){
+            $cart = $request->session()->get('shoppingcart')->gameids;
+        }
+        else{
+            //We don't need to pass it to a cookie, because the cart is empty
+            return view('auth.login');
+        }
+
+        //If Cookie already exists delete it
+        if(Cookie::has('cart')){
+            Cookie::queue('cart', json_encode($cart), 0); //Sets minutes to 0 in order to delete it
+        }
+
+        //Creates a new cookie
+        Cookie::queue('cart', json_encode($cart), 2);
+
+        //Sends user to the login page
+        return view('auth.login');
+    }
 
 }
