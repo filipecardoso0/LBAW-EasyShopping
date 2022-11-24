@@ -10,20 +10,27 @@ class GameOrder extends Model
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
 
+    /**
+     * The table associated with the model. (Overrides laravel's default naming convention)
+     *
+     * @var string
+     */
+    protected $table = 'game_order';
+
   /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-      'price',  
+      'orderid', 'gameid', 'price'
     ];
 
-  public function order() {
-    return $this->belongsTo('App\Models\Order');
+  public function orders() {
+    return $this->hasMany('App\Models\Order', 'orderID', 'orderID');
   }
 
-  public function cart() {
-    return $this->belongsTo('App\Models\ShoppingCart', 'userID', 'gameID');
+  public function games(){
+      return $this->hasMany('App\Models\Game', 'gameid', 'gameid');
   }
 }

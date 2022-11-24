@@ -33,7 +33,7 @@ class ShoppingCart extends Model
     ];
 
 
-    //Gets user cart products count -> Esta deve daar par acolocar em eloquent
+    //Gets user cart products count -> Esta deve dar par colocar em eloquent
     public static function userCartGamesCount(){
         $query = DB::table('shopping_cart')
           ->select((DB::raw('count(*) as cartgamescount')))
@@ -55,14 +55,22 @@ class ShoppingCart extends Model
         return $query;
     }
 
-    /*
+    //Removes the userid from the shopping cart
+    public static function eraseShoppingCart(int $userid){
+        DB::table('shopping_cart')
+            ->where('userid', '=', auth()->user()->userid)
+            ->delete();
+    }
+
   public function user() {
     return $this->belongsTo('App\Models\User', 'userid', 'userid');
   }
 
   public function games() {
-    return $this->belongsToMany('App\Models\Game', 'gameID');
+    return $this->hasMany('App\Models\Game', 'gameid', 'gameid');
   }
+    /*
+
 
   public function gameOrder() {
     return $this->hasOne('App\Models\GameOrder');

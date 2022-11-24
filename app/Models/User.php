@@ -76,6 +76,10 @@ class User extends Authenticatable
     }
     */
 
+    public function cart(){
+        return $this->hasMany(ShoppingCart::Class, 'userid', 'userid');
+    }
+
     /* GamePublisher */
     public function game() {
         return $this->hasMany(Game::Class, 'gameid', 'gameid');

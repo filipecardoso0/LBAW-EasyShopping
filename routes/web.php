@@ -57,4 +57,5 @@ Route::get('removeFromCart/{gameid}', 'ShoppingCartController@removeFromCartGues
 Route::get('guestCheckout', 'ShoppingCartController@guestItemstoCookie')->name('guestCheckout'); //Adds session cart items to a cookie in order to store this values temporarily
 
 //Checkout
-//Route::get('checkout', '')->name('checkout');
+Route::get('checkout', 'OrderController@showPaymentGateway')->name('checkout');
+Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePayment');

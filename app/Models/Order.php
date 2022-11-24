@@ -10,14 +10,24 @@ class Order extends Model
   // Don't add create and update timestamps in database.
   public $timestamps  = false;
 
-  /**
+    /**
+     * The table associated with the model. (Overrides laravel's default naming convention)
+     *
+     * @var string
+     */
+    protected $table = 'order_';
+
+    protected $primaryKey = 'orderid';
+
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-      'payment_method', 'state',
-      'value', 'order_date' 
+      'type', 'state',
+      'value', 'userid'
   ];
 
   /**
@@ -26,15 +36,14 @@ class Order extends Model
      * @var array
      */
     protected $hidden = [
-      'approved',
-  ];
+    ];
 
   public function user() {
     return $this->belongsTo('App\Models\User', 'userID');
   }
 
-  public function gameOrder() {
-    return $this->hasMany('App\Models\GameOrder', 'userID', 'gameID');
+  public function gameOrders(){
+      return $this->hasMany('App\Models\GameOrder', 'game_orderID', 'game_orderID');
   }
 
   /*

@@ -37,8 +37,9 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function getUser(){
-        return $request->user();
+    public function getUser(Request $request){
+        return $request->user();        //Erase Shopping Cart
+        ShoppingCart::eraseShoppingCart();
     }
 
     public function test(Request $request){

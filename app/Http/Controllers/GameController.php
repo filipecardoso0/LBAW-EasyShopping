@@ -13,6 +13,8 @@ class GameController extends Controller
     //TODO: CREATE THE NEW PRODUCT_CATEGORIES MODEL
     //TODO: Add Games Classification in a star manner
     //TODO: PASSAR AS QUERIES PARA O CONTROLLER
+    //TODO: ESTÁ A APARECER O USERNAME AO INVES DO GAMEPUBLISHER NAME NAS PAGINAS DO GAME E NO SHOPPING CART
+    //TODO: QUANDO O UTILIZAR DA SIGN IN DEPOIS DO REGISTER NAO SAO ADICIONADOS OS PRODUTOS AO SHOPPING CART
 
     public function index(int $gameid){
         //Queries the database in order to obtain game info of the given gameid
@@ -28,6 +30,7 @@ class GameController extends Controller
             ->with('games', $games);
     }
 
+    //TODO TROCAR A MANEIRA DE COMO ESTA QUERY É FEITA PARA JA ESTÁ NAO FUNCIONAL, COMO ESTIVE A TROCAR UMAS MERDAS NO GAME_ORDER E NO ORDER_
     public function showBestSellers(){
         $games = $this->getBestSellersWithPagination();
         return view('pages.bestsellers')
@@ -44,11 +47,14 @@ class GameController extends Controller
     public function getBestSellers(int $x){
         //Fetches the game info from orders table join with game table in descending order and having state=true(have been bought)
         if($x > 0){
+            //Select game_order.gameid, count(*) as salesgame from easyshopping.game_order Group by(gameid) Order by salesgame DESC;
+
             $query = DB::table('game')
-                    ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
-                    ->join('order_', 'order_.gameid', '=', 'game.gameid')
+                    ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', (DB::raw('count(*) as salesnum')))
+                    ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+                    ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
                     ->where('order_.state', '=', 'true')
-                    ->groupBy('game.gameid', 'order_.state')
+                    ->groupBy('game.gameid')
                     ->orderByRaw('salesnum DESC')
                     ->take($x)
                     ->get();

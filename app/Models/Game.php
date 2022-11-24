@@ -69,7 +69,7 @@ class Game extends Model
   */
 
   public function carts() {
-    return $this->belongsToMany('App\Models\ShoppingCart');
+    return $this->hasMany('App\Models\ShoppingCart');
   }
 
   public function categories() {

@@ -69,20 +69,21 @@ CREATE TABLE shopping_cart (
 );
 
 CREATE TABLE order_ (
-	userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE,
-	gameID INTEGER NOT NULL REFERENCES game (gameID) ON UPDATE CASCADE,
-	type payment_method,
-	state BOOLEAN DEFAULT NULL,
-	value NUMERIC(5,2) NOT NULL,
-	order_date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
-	PRIMARY KEY (userID, gameID)
+    orderID SERIAL NOT NULL,
+    userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE,
+    type payment_method,
+    state BOOLEAN DEFAULT NULL,
+    value NUMERIC(5,2) NOT NULL,
+    order_date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    PRIMARY KEY (orderID)
 );
 
 CREATE TABLE game_order (
-	userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE,
-	gameID INTEGER NOT NULL REFERENCES game (gameID) ON UPDATE CASCADE,
-	price NUMERIC(5,2) NOT NULL,
-	PRIMARY KEY (userID, gameID)
+    id SERIAL NOT NULL,
+    orderID INTEGER NOT NULL REFERENCES order_ (orderID) ON UPDATE CASCADE,
+    gameID INTEGER NOT NULL REFERENCES game (gameID) ON UPDATE CASCADE,
+    price NUMERIC(5,2) NOT NULL,
+    PRIMARY KEY (orderID, gameID)
 );
 
 CREATE TABLE notification(
@@ -312,6 +313,8 @@ $$
 language plpgsql;
 
 --Adds user games on shopping_cart and its prices to the table responsible for the checkout
+--TODO FIX THIS FUNCTION
+/*
 CREATE OR REPLACE FUNCTION transGameToCheckout(userIdentifier int)
 returns void
 as
@@ -324,4 +327,4 @@ BEGIN
 END;
 $$
 language plpgsql;
-
+*/

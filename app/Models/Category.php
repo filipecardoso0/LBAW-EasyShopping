@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+//TODO REVER OS METODOS DO BELONG TO E HAS MANY
+
 class Category extends Model
 {
     /**
@@ -27,6 +29,7 @@ class Category extends Model
       'name',
   ];
 
+  //TODO REVER AS CATEGORIAS
   public function games() {
     return $this->belongsToMany(Game::Class, 'gameid', 'gameid');
   }

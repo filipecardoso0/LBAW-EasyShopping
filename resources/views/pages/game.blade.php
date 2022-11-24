@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <!--TODO add breadcrumbs & add reviews}}-->
+    <!--TODO add breadcrumbs}}-->
     <section class="flex flex-col">
         <section class="flex flex-col md:flex-row mt-8 ml-4">
             <img class="w-15 h-18 lg:w-70 lg:h-100 mr-4 mb-4" src="https://picsum.photos/200/300" alt="Game Image">
