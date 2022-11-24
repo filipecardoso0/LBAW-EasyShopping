@@ -24,7 +24,7 @@ class GameController extends Controller
     }
 
     public function showAll(){
-        $games = Game::paginate(12);
+        $games = Game::orderBy('title')->paginate(12);
         return view('pages.games')
             ->with('games', $games);
     }
@@ -61,7 +61,8 @@ class GameController extends Controller
 
         $query = DB::table('game')
                 ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
-                ->join('order_', 'order_.gameid', '=', 'game.gameid')
+                ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+                ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
                 ->where('order_.state', '=', 'true')
                 ->groupBy('game.gameid', 'order_.state')
                 ->orderByRaw('salesnum DESC')
@@ -73,12 +74,13 @@ class GameController extends Controller
     //Fetches game info from the game with the biggest amount of sales to the one with the least amount of sales
     public function getBestSellersWithPagination(){
         $query = DB::table('game')
-            ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
-            ->join('order_', 'order_.gameid', '=', 'game.gameid')
-            ->where('order_.state', '=', 'true')
-            ->groupBy('game.gameid', 'order_.state')
-            ->orderByRaw('salesnum DESC')
-            ->paginate(12);
+                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
+                ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+                ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
+                ->where('order_.state', '=', 'true')
+                ->groupBy('game.gameid', 'order_.state')
+                ->orderByRaw('salesnum DESC')
+                ->paginate(12);
 
         return $query;
     }
@@ -103,4 +105,26 @@ class GameController extends Controller
         $tobereleased = Game::where('release_date', '>', $currdate)->paginate(12); //Gets all the games that are coming soon
         return $tobereleased;
     }
+
+    /**
+     * Shows the search result for games.
+     *
+     * @param Request $request 
+     * 
+     * @return Response
+     */
+    public function search(Request $request)
+    {
+        // Get the search value from the request
+        $search = $request->input('search');
+
+        $games = Game::query()
+                ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$search}%")
+                ->orWhere('title', 'ILIKE', "%{$search}%")
+                ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$search}%")
+                ->paginate(12);
+
+        return view('pages.search', ['results' => $games]);
+    }
+
 }

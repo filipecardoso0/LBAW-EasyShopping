@@ -13,7 +13,7 @@
 // Home
 use App\Http\Controllers\Auth\RegisterController;
 
-Route::get('/', 'OverviewController@index');
+Route::get('/', 'OverviewController@index')->name('homepage');
 
 /*
 // Cards
@@ -62,3 +62,6 @@ Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePaymen
 
 //Dashboard
 Route::get('profile', 'UserController@index')->name('userprofile');
+
+//Search
+Route::get('/search', 'GameController@search')->name('search');

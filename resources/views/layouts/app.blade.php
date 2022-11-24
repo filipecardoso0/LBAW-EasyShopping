@@ -22,12 +22,19 @@
   </head>
   <body class="bg-gray-800">
       <nav class="flex flex-col md:flex-row flex-wrap bg-gray-900 text-neutral-50 p-2 items-center justify-between">
-          <section class="flex flex-wrap items-center space-x-4">
+          <section class="flex flex-wrap items-center bg-gray-900 space-x-4">
               <a class="font-normal text-md" href="{{ url('/') }}">Easy Shopping</a>
               <a href="{{ url('/') }}"><img src="{{ url('/image/logo.png')}}" alt="Easy Shopping Logo Image" class="w-12 h-12"></a>
           </section>
 
           <ul class="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-x-0 space-y-2 font-normal text-md flex-wrap items-center">
+            
+            <li>
+                <form action="{{ route('search') }}" method="GET" class="d-block border-0 justify-content-center align-items-center text-center text-body mx-auto">
+                    <input id="search" name="search" type="text" placeholder="Type here">
+                    <input class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" id="submit" type="submit" value="Search">
+                </form>
+            </li>
               <li>
                   <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{  route('shoppingcart') }}"><i class="fa-solid fa-cart-shopping"></i>
                       <span class="text-amber-400">
