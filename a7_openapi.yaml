@@ -1,0 +1,269 @@
+openapi: 3.0.0
+
+info:
+ version: '1.0'
+ title: 'LBAW MediaLibrary Web API'
+ description: 'Web Resources Specification (A7) for MediaLibrary'
+
+servers:
+- url: http://lbaw.fe.up.pt
+  description: Production server
+
+externalDocs:
+ description: Find more info here.
+ url: https://web.fe.up.pt/~ssn/wiki/teach/lbaw/medialib/a07
+
+tags:
+ - name: 'M01: Authentication and Profile'
+ - name: 'M02: Products and Categories'
+ - name: 'M03: Management Area'
+ - name: 'M04: Product and Reviews'
+ - name: 'M05: Static pages'
+ - name: 'M06: Cart and Wishlist'
+
+paths:
+ /login:
+   get:
+     operationId: R101
+     summary: 'R101: Login Form'
+     description: 'Provide login form. Access: PUB'
+     tags:
+       - 'M01: Authentication and Profile'
+     responses:
+       '200':
+         description: 'Ok. Show Log-in UI'
+   post:
+     operationId: R102
+     summary: 'R102: Login Action'
+     description: 'Processes the login form submission. Access: PUB'
+     tags:
+       - 'M01: Authentication and Profile'
+
+     requestBody:
+       required: true
+       content:
+         application/x-www-form-urlencoded:
+           schema:
+             type: object
+             properties:
+               email:
+                 type: string
+               password:
+                 type: string
+             required:
+                  - email
+                  - password
+
+     responses:
+       '302':
+         description: 'Redirect after processing the login credentials.'
+         headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful authentication. Redirect to user profile.'
+                 value: '/users/{id}'
+               302Error:
+                 description: 'Failed authentication. Redirect to login form.'
+                 value: '/login'
+
+ /logout:
+   post:
+     operationId: R103
+     summary: 'R103: Logout Action'
+     description: 'Logout the current authenticated user. Access: USR, ADM'
+     tags:
+       - 'M01: Authentication and Profile'
+     responses:
+       '302':
+         description: 'Redirect after processing logout.'
+         headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful logout. Redirect to login form.'
+                 value: '/login'
+
+ /register:
+   get:
+     operationId: R104
+     summary: 'R104: Register Form'
+     description: 'Provide new user registration form. Access: PUB'
+     tags:
+       - 'M01: Authentication and Profile'
+     responses:
+       '200':
+         description: 'Ok. Show Sign-Up UI'
+
+   post:
+     operationId: R105
+     summary: 'R105: Register Action'
+     description: 'Processes the new user registration form submission. Access: PUB'
+     tags:
+       - 'M01: Authentication and Profile'
+
+     requestBody:
+       required: true
+       content:
+         application/x-www-form-urlencoded:
+           schema:
+             type: object
+             properties:
+               username:
+                 type: string
+               email:
+                 type: string
+               password:
+                 type: string
+             required:
+              - username
+              - email
+              - password
+
+     responses:
+       '302':
+         description: 'Redirect after processing the new user information.'
+         headers:
+           Location:
+             schema:
+               type: string
+             examples:
+               302Success:
+                 description: 'Successful authentication. Redirect to user profile.'
+                 value: '/users/{id}'
+               302Failure:
+                 description: 'Failed authentication. Redirect to login form.'
+                 value: '/login'
+
+ /profile:
+   get:
+     operationId: R106
+     summary: 'R106: View profile'
+     description: 'Show the individual user profile. Access: USR'
+     tags:
+       - 'M01: Authentication and Profile'
+
+     parameters:
+       - in: path
+         name: id
+         schema:
+           type: integer
+         required: true
+
+     responses:
+       '200':
+         description: 'Ok. Show User Profile UI'
+
+ /comingsoon:
+      get:
+          operationId: R202
+          summary: 'R202: View Coming Soon Games	'
+          description: 'Provide a comming soon games page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /bestsellers:
+      get:
+          operationId: R203
+          summary: 'R203: View Best Selling Games'
+          description: 'Provide a best selling games page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /all:
+      get:
+          operationId: R204
+          summary: 'R204: View All Games'
+          description: 'Provide a general games page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /categories:
+      get:
+          operationId: R205
+          summary: 'R205: View Categories'
+          description: 'Provide a general categories page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /details/{game_id}:
+      get:
+          operationId: R401
+          summary: 'R401: View Game Details'
+          description: 'Provide a specific game page. Access: PUB'
+          tags:
+            - 'M04: Product and Reviews'
+          responses:
+            '203':
+              description: 'Ok. Show game Page.'
+
+ /addtocart:
+      get:
+          operationId: R601
+          summary: 'R601: Add Product to Shopping Cart	'
+          description: 'Add a certain product to the current cart. Access: PUB'
+          tags:
+            - 'Module M06: Cart and Wishlist'
+          responses:
+            '203':
+              description: 'Ok. Show Game UI.'
+
+ /removefromcart:
+      delete:
+       operationId: R602
+       summary: 'R602: Remove Product from Shopping Cart'
+       tags:
+        - 'Module M06: Cart and Wishlist'
+       responses:
+        '201' :
+           description: 'Game successfuly removed'
+        '404' :
+           description: 'Game not found'
+        '401' :
+           description: 'Unauthorized Operation'
+
+ /checkout:
+      get:
+          operationId: R603
+          summary: 'Checkout Form'
+          description: 'Show the checkout page. Access: PUB'
+          tags:
+            - 'M06: Cart and Wishlist'
+          responses:
+            '203':
+              description: 'Ok. Show checkout Page.'
+
+ /finalize:
+      post:
+          operationId: R604
+          summary: 'R604: Checkout Action	'
+          description: 'Checkout the items in the shopping cart. Access: USR'
+          tags:
+            - 'M06: Cart and Wishlist'
+          responses:
+            '302':
+              description: 'Redirect after processing checkout.'
+              headers:
+                Location:
+                  schema:
+                    type: string
+                  examples:
+                    302Success:
+                      description: 'Successful checkout. Redirect to games page.'
+                      value: '/all'
