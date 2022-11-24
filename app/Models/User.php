@@ -16,7 +16,6 @@ class User extends Authenticatable
 
     protected $primaryKey = 'userid'; //Overrides id as default primary key
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -55,7 +54,7 @@ class User extends Authenticatable
     }
 
     public function orders() {
-        return $this->hasMany('App\Models\Order');
+        return $this->hasMany('App\Models\Order', 'orderid');
     }
 
     public function notifications() {

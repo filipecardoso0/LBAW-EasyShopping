@@ -20,7 +20,7 @@
             <p class="text-amber-400 items-center mt-4">There are no categories at the moment!</p>
         @endif
     </section>
-    
+
     <!-- Best Sellers-->
     <section class="flex flex-col items-center mt-4 bg-gray-900 p-6">
         <p class="text-neutral-50 font-semibold text-2xl"><i class="fa-sharp fa-solid fa-fire-flame-curved text-amber-400"></i> Best Sellers</p>

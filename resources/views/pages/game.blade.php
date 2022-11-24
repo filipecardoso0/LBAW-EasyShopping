@@ -10,7 +10,7 @@
                 <h2 class="text-neutral-50"><span class="text-amber-400 font-semibold text-xl">Release</span>: {{\Carbon\Carbon::parse($game->release_date)->format('d/m/Y')}}</h2>
                 <p class="text-neutral-50">Classification</p>
                 <p class="text-amber-400 font-semibold">Categories/Category:</p> <!--Usar aquela cena da gramatica que o meu menino mostra no crash course de laravel-->
-                <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->username }}</span></p>
+                <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
                 <section class="flex flex-row mt-6 space-x-4">
                     @auth
                     <form method="post" action="{{ route('addtocart') }}">

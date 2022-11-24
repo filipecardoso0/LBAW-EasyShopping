@@ -59,3 +59,6 @@ Route::get('guestCheckout', 'ShoppingCartController@guestItemstoCookie')->name('
 //Checkout
 Route::get('checkout', 'OrderController@showPaymentGateway')->name('checkout');
 Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePayment');
+
+//Dashboard
+Route::get('profile', 'UserController@index')->name('userprofile');

@@ -57,7 +57,7 @@ class Game extends Model
   //Get GamePublisher through the gameid
   public static function getOwnerNameByGameId(int $id){
       $game = Game::find($id);
-      return $game->user->username;
+      return $game->user->publisher_name;
   }
 
 

@@ -12,8 +12,7 @@ class GameController extends Controller
     //TODO: FIX DATABASE CATEGORIES ERROR(GAMES CAN HAVE ONLY 1 CATEGORY)
     //TODO: CREATE THE NEW PRODUCT_CATEGORIES MODEL
     //TODO: Add Games Classification in a star manner
-    //TODO: PASSAR AS QUERIES PARA O CONTROLLER
-    //TODO: ESTÁ A APARECER O USERNAME AO INVES DO GAMEPUBLISHER NAME NAS PAGINAS DO GAME E NO SHOPPING CART
+    //TODO: PASSAR AS QUERIES PARA O CONTROLLER(AS QUE FAZEM SENTIDO)
     //TODO: QUANDO O UTILIZAR DA SIGN IN DEPOIS DO REGISTER NAO SAO ADICIONADOS OS PRODUTOS AO SHOPPING CART
 
     public function index(int $gameid){
@@ -30,7 +29,6 @@ class GameController extends Controller
             ->with('games', $games);
     }
 
-    //TODO TROCAR A MANEIRA DE COMO ESTA QUERY É FEITA PARA JA ESTÁ NAO FUNCIONAL, COMO ESTIVE A TROCAR UMAS MERDAS NO GAME_ORDER E NO ORDER_
     public function showBestSellers(){
         $games = $this->getBestSellersWithPagination();
         return view('pages.bestsellers')

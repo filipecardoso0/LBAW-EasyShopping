@@ -39,7 +39,7 @@ class Order extends Model
     ];
 
   public function user() {
-    return $this->belongsTo('App\Models\User', 'userID');
+    return $this->hasMany('App\Models\User', 'userid');
   }
 
   public function gameOrders(){

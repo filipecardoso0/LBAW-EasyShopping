@@ -77,6 +77,7 @@ class OrderController extends Controller
         ShoppingCart::eraseShoppingCart($request->user()->userid);
 
         //Redirects user to his dashboard
+        return redirect()->route('userprofile');
     }
 
 }
