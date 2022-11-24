@@ -70,7 +70,6 @@ paths:
                  value: '/login'
 
  /logout:
-
    post:
      operationId: R103
      summary: 'R103: Logout Action'
@@ -140,7 +139,7 @@ paths:
                  description: 'Failed authentication. Redirect to login form.'
                  value: '/login'
 
- /users/view-profile:
+ /profile:
    get:
      operationId: R106
      summary: 'R106: View profile'
@@ -159,210 +158,112 @@ paths:
        '200':
          description: 'Ok. Show User Profile UI'
 
- /users/edit-profile:
-   get:
-     operationId: R107
-     summary: 'R107: Edit Profile Form'
-     description: 'Provide the User Profile Edition Form. Access: USR'
-     tags:
-       - 'M01: Authentication and Profile'
-
-     parameters:
-       - in: path
-         name: id
-         schema:
-           type: integer
-         required: true
-
-     responses:
-       '200':
-         description: 'Ok. Show Edit User Profile UI'
-
-   post:
-     operationId: R108
-     summary: 'R108: Edit Profile Action'
-     description: 'Processes the user profile edition form submission. Access: PUB'
-     tags:
-       - 'M01: Authentication and Profile'
-
-     requestBody:
-       required: true
-       content:
-         application/x-www-form-urlencoded:
-           schema:
-             type: object
-             properties:
-               email:
-                 type: string
-               username:
-                 type: string
-               password:
-                 type: string
-             required:
-              - email
-              - username
-              - password
-
-/api/games:
-    get:
-      operationId: R201
-      summary: 'R201: Simple Match Search'
-      description: 'Searches for games and returns the results as JSON. Access: PUB.'
-
-      tags:
-        - 'M02: Products and Categories'
-
-      parameters:
-        - in: query
-          name: query
-          description: String to use for simple match search
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: item
-          description: Category of the games
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: loaned
-          description: Boolean with the loaned flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: owner
-          description: Boolean with the owner flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: classification
-          description: Integer corresponding to the work classification
-          schema:
-            type: integer
-          required: false
-
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-
-    get:
-      operationId: R203
-      summary: 'R203: Full Text Search'
-      description: 'Searches for games and returns the results as JSON. Access: PUB.'
-
-      tags:
-        - 'M02: Products and Categories'
-
-      parameters:
-        - in: query
-          name: query
-          description: String to use for full-text search
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: item
-          description: Category of the games
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: loaned
-          description: Boolean with the loaned flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: owner
-          description: Boolean with the owner flag value
-          schema:
-            type: boolean
-          required: false
-        - in: query
-          name: classification
-          description: Integer corresponding to the game classification
-          schema:
-            type: integer
-          required: false
-
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-                    description:
-                      type: string
-                    year:
-                      type: string
-                    publisher:
-                      type: string
-                    category:
-                      type: string
-
- /cancel-order:
+ /comingsoon:
       get:
-          operationId: R301
-          summary: 'R301: Cancel Order Form'
-          description: 'Provide Order Cancelation Form. Access: PUB'
+          operationId: R202
+          summary: 'R202: View Coming Soon Games	'
+          description: 'Provide a comming soon games page. Access: PUB'
           tags:
-            - 'M04: Product and Reviews'
-          responses:
-            '203':
-              description: 'Ok. Show Order Cancelation UI.'
-      delete:
-       operationId: R302
-       summary: 'R302: Cancel Order Action'
-       tags:
-        - 'M04: Product and Reviews'
-       responses:
-        '201' :
-           description: 'Order Canceled'
-        '404' :
-           description: 'Order not found'
-        '401' :
-           description: 'Unauthorized Operation'
-
- /game:
-      get:
-          operationId: R401
-          summary: 'R401: View Game'
-          description: 'Provide a general games page. Access: PUB'
-          tags:
-            - 'M04: Product and Reviews'
+            - 'M02: Products and Categories'
           responses:
             '203':
               description: 'Ok. Show games Page.'
 
- /game/{id}:
+ /bestsellers:
+      get:
+          operationId: R203
+          summary: 'R203: View Best Selling Games'
+          description: 'Provide a best selling games page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /all:
+      get:
+          operationId: R204
+          summary: 'R204: View All Games'
+          description: 'Provide a general games page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /categories:
+      get:
+          operationId: R205
+          summary: 'R205: View Categories'
+          description: 'Provide a general categories page. Access: PUB'
+          tags:
+            - 'M02: Products and Categories'
+          responses:
+            '203':
+              description: 'Ok. Show games Page.'
+
+ /details/{game_id}:
       get:
           operationId: R401
-          summary: 'R402: View Game Details'
+          summary: 'R401: View Game Details'
           description: 'Provide a specific game page. Access: PUB'
           tags:
             - 'M04: Product and Reviews'
           responses:
             '203':
               description: 'Ok. Show game Page.'
+
+ /addtocart:
+      get:
+          operationId: R601
+          summary: 'R601: Add Product to Shopping Cart	'
+          description: 'Add a certain product to the current cart. Access: PUB'
+          tags:
+            - 'Module M06: Cart and Wishlist'
+          responses:
+            '203':
+              description: 'Ok. Show Game UI.'
+
+ /removefromcart:
+      delete:
+       operationId: R602
+       summary: 'R602: Remove Product from Shopping Cart'
+       tags:
+        - 'Module M06: Cart and Wishlist'
+       responses:
+        '201' :
+           description: 'Game successfuly removed'
+        '404' :
+           description: 'Game not found'
+        '401' :
+           description: 'Unauthorized Operation'
+
+ /checkout:
+      get:
+          operationId: R603
+          summary: 'Checkout Form'
+          description: 'Show the checkout page. Access: PUB'
+          tags:
+            - 'M06: Cart and Wishlist'
+          responses:
+            '203':
+              description: 'Ok. Show checkout Page.'
+
+ /finalize:
+      post:
+          operationId: R604
+          summary: 'R604: Checkout Action	'
+          description: 'Checkout the items in the shopping cart. Access: USR'
+          tags:
+            - 'M06: Cart and Wishlist'
+          responses:
+            '302':
+              description: 'Redirect after processing checkout.'
+              headers:
+                Location:
+                  schema:
+                    type: string
+                  examples:
+                    302Success:
+                      description: 'Successful checkout. Redirect to games page.'
+                      value: '/all'
