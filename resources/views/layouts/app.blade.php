@@ -28,10 +28,10 @@
           </section>
 
           <ul class="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-x-0 space-y-2 font-normal text-md flex-wrap items-center">
-            
+
             <li>
                 <form action="{{ route('search') }}" method="GET" class="d-block border-0 justify-content-center align-items-center text-center text-body mx-auto">
-                    <input id="search" name="search" type="text" placeholder="Type here">
+                    <input class="text-black" id="search" name="search" type="text" placeholder="Type here">
                     <input class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" id="submit" type="submit" value="Search">
                 </form>
             </li>
