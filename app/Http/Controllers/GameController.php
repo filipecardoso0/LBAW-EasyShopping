@@ -13,7 +13,6 @@ class GameController extends Controller
     //TODO: CREATE THE NEW PRODUCT_CATEGORIES MODEL
     //TODO: Add Games Classification in a star manner
     //TODO: PASSAR AS QUERIES PARA O CONTROLLER(AS QUE FAZEM SENTIDO)
-    //TODO: QUANDO O UTILIZAR DA SIGN IN DEPOIS DO REGISTER NAO SAO ADICIONADOS OS PRODUTOS AO SHOPPING CART
 
     public function index(int $gameid){
         //Queries the database in order to obtain game info of the given gameid
