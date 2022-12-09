@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
+@section('title', 'Bestsellers')
+
 @section('content')
+
+@include('partials.breadcrumbs', $path = array('Bestsellers' => route('bestsellers')))
     <section class="flex flex-col">
-        <h1 class="text-neutral-50 font-semibold m-8 text-2xl"><i class="fa-sharp fa-solid fa-fire-flame-curved text-amber-400"></i> BEST SELLERS</h1>
         @if($games->count())
             <section class="flex flex-col lg:flex-row gap-4 justify-center flex-wrap mt-6 ml-6 mr-6 items-center">
                 @foreach($games as $game)

@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
+@section('title', 'Categories')
+
 @section('content')
+
+@include('partials.breadcrumbs', $path = array('Categories' => route('categories')))
     <section class="flex flex-col">
-        <h1 class="text-neutral-50 font-semibold m-8 text-2xl">CATEGORIES:</h1>
         @if($categories->count())
         <section class="flex flex-col lg:flex-row gap-4 justify-center flex-wrap mt-6 ml-6 mr-6 items-center">
                 @foreach($categories as $category)
