@@ -9,7 +9,6 @@ use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
 
 //TODO REPLACE THIS FAKE PAYMENT GATEWAY BY THE SPLICE/PAYPAL ONE
-//TODO ADD ERROR MESSAGES IN THE PLACES NEEDED
 
 class OrderController extends Controller
 {

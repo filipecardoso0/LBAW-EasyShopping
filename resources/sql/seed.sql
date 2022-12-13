@@ -44,6 +44,12 @@ CREATE TABLE game (
 	approved BOOLEAN DEFAULT false NOT NULL
 );
 
+CREATE TABLE game_categories(
+    gameID INTEGER NOT NULL REFERENCES game (gameID) ON UPDATE CASCADE,
+    categoryID INTEGER NOT NULL REFERENCES category (categoryID) ON UPDATE CASCADE,
+    PRIMARY KEY(gameID, categoryID)
+);
+
 CREATE TABLE review (
 	reviewID SERIAL PRIMARY KEY,
 	userID INTEGER NOT NULL REFERENCES users (userID) ON UPDATE CASCADE,
@@ -305,21 +311,18 @@ $$
 language plpgsql;
 
 --Adds user games on shopping_cart and its prices to the table responsible for the checkout
---TODO FIX THIS FUNCTION
-/*
 CREATE OR REPLACE FUNCTION transGameToCheckout(userIdentifier int)
 returns void
 as
 $$
 BEGIN
-	INSERT INTO game_order (userid, gameID, price)
+	INSERT INTO game_order (userid, gameID, game_price)
 	(SELECT userid, gameID, game_price FROM shopping_cart WHERE userID = userIdentifier);
 	-- Deletes games from shopping cart
 	DELETE FROM shopping_cart WHERE userID = userIdentifier;
 END;
 $$
 language plpgsql;
-*/
 
 -----------------------------------------
 -- Populate
@@ -441,6 +444,78 @@ insert into game (userID, title, description, price, categoryID, release_date, c
 insert into game (userID, title, description, price, categoryID, release_date, classification, discount, approved) values (17, 'Girl from Monday, The', 'Self-enabling mission-critical system engine', 21, 10, '2013-08-16', 3, 0.89, true);
 insert into game (userID, title, description, price, categoryID, release_date, classification, discount, approved) values (13, 'Shakiest Gun in the West, The', 'Proactive upward-trending initiative', 91, 10, '2010-05-29', 4, 0.94, false);
 insert into game (userID, title, description, price, categoryID, release_date, classification, discount, approved) values (37, 'City Zero', 'Visionary tertiary algorithm', 52, 8, '2012-06-07', 5, 0.01, false);
+
+-- Populate Table Game Categories
+insert into game_categories (gameID, categoryID) values (1, 9);
+insert into game_categories (gameID, categoryID) values (1, 2);
+insert into game_categories (gameID, categoryID) values (2, 1);
+insert into game_categories (gameID, categoryID) values (2, 10);
+insert into game_categories (gameID, categoryID) values (3, 4);
+insert into game_categories (gameID, categoryID) values (3, 3);
+insert into game_categories (gameID, categoryID) values (4, 6);
+insert into game_categories (gameID, categoryID) values (4, 5);
+insert into game_categories (gameID, categoryID) values (5, 2);
+insert into game_categories (gameID, categoryID) values (5, 6);
+insert into game_categories (gameID, categoryID) values (6, 6);
+insert into game_categories (gameID, categoryID) values (6, 7);
+insert into game_categories (gameID, categoryID) values (7, 3);
+insert into game_categories (gameID, categoryID) values (7, 8);
+insert into game_categories (gameID, categoryID) values (8, 7);
+insert into game_categories (gameID, categoryID) values (8, 9);
+insert into game_categories (gameID, categoryID) values (9, 8);
+insert into game_categories (gameID, categoryID) values (9, 10);
+insert into game_categories (gameID, categoryID) values (10, 9);
+insert into game_categories (gameID, categoryID) values (10, 8);
+insert into game_categories (gameID, categoryID) values (11, 8);
+insert into game_categories (gameID, categoryID) values (11, 7);
+insert into game_categories (gameID, categoryID) values (12, 1);
+insert into game_categories (gameID, categoryID) values (12, 6);
+insert into game_categories (gameID, categoryID) values (13, 5);
+insert into game_categories (gameID, categoryID) values (13, 4);
+insert into game_categories (gameID, categoryID) values (14, 10);
+insert into game_categories (gameID, categoryID) values (14, 3);
+insert into game_categories (gameID, categoryID) values (15, 5);
+insert into game_categories (gameID, categoryID) values (15, 2);
+insert into game_categories (gameID, categoryID) values (16, 9);
+insert into game_categories (gameID, categoryID) values (16, 1);
+insert into game_categories (gameID, categoryID) values (17, 8);
+insert into game_categories (gameID, categoryID) values (17, 2);
+insert into game_categories (gameID, categoryID) values (18, 10);
+insert into game_categories (gameID, categoryID) values (18, 3);
+insert into game_categories (gameID, categoryID) values (19, 1);
+insert into game_categories (gameID, categoryID) values (19, 4);
+insert into game_categories (gameID, categoryID) values (20, 7);
+insert into game_categories (gameID, categoryID) values (20, 5);
+insert into game_categories (gameID, categoryID) values (21, 10);
+insert into game_categories (gameID, categoryID) values (22, 4);
+insert into game_categories (gameID, categoryID) values (23, 1);
+insert into game_categories (gameID, categoryID) values (24, 6);
+insert into game_categories (gameID, categoryID) values (25, 5);
+insert into game_categories (gameID, categoryID) values (26, 7);
+insert into game_categories (gameID, categoryID) values (27, 9);
+insert into game_categories (gameID, categoryID) values (28, 9);
+insert into game_categories (gameID, categoryID) values (29, 10);
+insert into game_categories (gameID, categoryID) values (30, 9);
+insert into game_categories (gameID, categoryID) values (31, 3);
+insert into game_categories (gameID, categoryID) values (32, 7);
+insert into game_categories (gameID, categoryID) values (33, 6);
+insert into game_categories (gameID, categoryID) values (34, 1);
+insert into game_categories (gameID, categoryID) values (35, 7);
+insert into game_categories (gameID, categoryID) values (36, 8);
+insert into game_categories (gameID, categoryID) values (37, 6);
+insert into game_categories (gameID, categoryID) values (38, 5);
+insert into game_categories (gameID, categoryID) values (39, 3);
+insert into game_categories (gameID, categoryID) values (40, 3);
+insert into game_categories (gameID, categoryID) values (41, 5);
+insert into game_categories (gameID, categoryID) values (42, 8);
+insert into game_categories (gameID, categoryID) values (43, 9);
+insert into game_categories (gameID, categoryID) values (44, 9);
+insert into game_categories (gameID, categoryID) values (45, 10);
+insert into game_categories (gameID, categoryID) values (46, 4);
+insert into game_categories (gameID, categoryID) values (47, 5);
+insert into game_categories (gameID, categoryID) values (48, 8);
+insert into game_categories (gameID, categoryID) values (49, 10);
+insert into game_categories (gameID, categoryID) values (50, 2);
 
 -- Populate Table Review
 /* Take a look at it later

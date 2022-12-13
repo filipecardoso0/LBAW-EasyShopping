@@ -1,15 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-    <!--TODO add breadcrumbs}}-->
     <section class="flex flex-col">
         <section class="flex flex-col md:flex-row mt-8 ml-4">
             <img class="w-15 h-18 lg:w-70 lg:h-100 mr-4 mb-4" src="https://picsum.photos/200/300" alt="Game Image">
             <article class="ml-4 space-y-2">
                 <h1 class="text-amber-400 font-semibold text-2xl">{{ $game->title }}</h1>
-                <h2 class="text-neutral-50"><span class="text-amber-400 font-semibold text-xl">Release</span>: {{\Carbon\Carbon::parse($game->release_date)->format('d/m/Y')}}</h2>
-                <p class="text-neutral-50">Classification</p>
-                <p class="text-amber-400 font-semibold">Categories/Category:</p> <!--Usar aquela cena da gramatica que o meu menino mostra no crash course de laravel-->
+                <h2 class="text-neutral-50"><span class="text-amber-400 font-semibold text-xl">Release:</span> {{\Carbon\Carbon::parse($game->release_date)->format('d/m/Y')}}</h2>
+                <p class="text-amber-400 font-semibold">Classification:
+                    @for($i=0; $i<5; $i++)
+                        @if($i<round($game->classification))
+                            <span class="text-neutral-50"><i class="fa-solid fa-star"></i></span>
+                        @else
+                            <span class="text-neutral-50"><i class="fa-regular fa-star"></i></span>
+                        @endif
+                    @endfor
+                </p>
+                <p class="text-amber-400 font-semibold">Categories/Category:
+                    <span class="text-neutral-50">
+                    </span> <!-- TODO Adicionar hyperlink para a categoria -->
+                </p> <!--TODO Usar aquela cena da gramatica que o meu menino mostra no crash course de laravel t=3124s-->
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
                 <section class="flex flex-row mt-6 space-x-4">
                     @auth

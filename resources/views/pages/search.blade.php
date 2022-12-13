@@ -11,7 +11,7 @@
 @else
 <div class="flex flex-col lg:flex-row gap-4 justify-center flex-wrap mt-6 ml-6 mr-6 items-center">
   @foreach($results as $game)
-  @include('partials.game_card', $game)
+      @include('partials.game_card', $game)
   @endforeach
 <div>
 @endif
