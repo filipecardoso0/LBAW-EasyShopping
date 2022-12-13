@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
+@section('title', 'Checkout')
+
 @section('content')
+
+@include('partials.breadcrumbs', $path = array('Checkout' => route('checkout')))
     <section class="flex flex-col items-center justify-center h-screen mt-12 mb-24">
 
             <!-- {{ $totalCheckout = 0 }} -->

@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('partials.breadcrumbs', $path = array('Search Results' => ''))
+
 @if(count($results) == 0)
 <div class="text-center text-danger">
   No Results Found!
