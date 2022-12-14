@@ -34,6 +34,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+    /* Eloquent Relational Mapping */
     public function userCarts() {
         return $this->hasMany('App\Models\ShoppingCart');
     }

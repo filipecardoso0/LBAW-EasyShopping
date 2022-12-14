@@ -4,34 +4,39 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Game;
+use App\Models\GameCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+//TODO PASSAR PARA O MODEL TODAS AS QUERIES QUE ESTAO EM CONTROLLERS
 
 class GameController extends Controller
 {
     public function index(int $gameid){
         //Queries the database in order to obtain game info of the given gameid
         $game = Game::find($gameid);
+        $gamecategories = GameCategories::getGameCategories($gameid);
 
-        return view('pages.game')
-            ->with('game', $game);
+        return view('pages.gamerelated.game')
+            ->with('game', $game)
+            ->with('categories', $gamecategories);
     }
 
     public function showAll(){
         $games = Game::orderBy('title')->paginate(12);
-        return view('pages.games')
+        return view('pages.gamerelated.games')
             ->with('games', $games);
     }
 
     public function showBestSellers(){
         $games = $this->getBestSellersWithPagination();
-        return view('pages.bestsellers')
+        return view('pages.gamerelated.bestsellers')
             ->with('games', $games);
     }
 
     public function showComingSoon(){
         $games = $this->getComingSoonWithPagination(0);
-        return view('pages.comingsoon')
+        return view('pages.gamerelated.comingsoon')
             ->with('games', $games);
     }
 
@@ -42,7 +47,7 @@ class GameController extends Controller
             //Select game_order.gameid, count(*) as salesgame from easyshopping.game_order Group by(gameid) Order by salesgame DESC;
 
             $query = DB::table('game')
-                    ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', (DB::raw('count(*) as salesnum')))
+                    ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', (DB::raw('count(*) as salesnum')))
                     ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
                     ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
                     ->where('order_.state', '=', 'true')
@@ -54,7 +59,7 @@ class GameController extends Controller
         }
 
         $query = DB::table('game')
-                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
+                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'order_.state', (DB::raw('count(*) as salesnum')))
                 ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
                 ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
                 ->where('order_.state', '=', 'true')
@@ -68,7 +73,7 @@ class GameController extends Controller
     //Fetches game info from the game with the biggest amount of sales to the one with the least amount of sales
     public function getBestSellersWithPagination(){
         $query = DB::table('game')
-                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
+                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'order_.state', (DB::raw('count(*) as salesnum')))
                 ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
                 ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
                 ->where('order_.state', '=', 'true')

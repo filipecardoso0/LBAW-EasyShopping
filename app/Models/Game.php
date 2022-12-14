@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Game extends Model
 {
@@ -40,6 +41,17 @@ class Game extends Model
       'approved',
   ];
 
+  public static function getLatestGames(int $limit){
+    $query = DB::table('game')
+            ->select('game.gameid', 'game.price', 'game.title', 'game.release_date')
+            ->orderbyRaw('game.release_date DESC')
+            ->take($limit)
+            ->get();
+    return $query;
+  }
+
+    //Eloquent Relational Mapping
+
   //Gets game reviews
   public function reviews() {
     return $this->hasMany(Review::Class, 'gameid', 'gameid');
@@ -72,8 +84,8 @@ class Game extends Model
     return $this->hasMany('App\Models\ShoppingCart');
   }
 
-  public function categories() {
-    return $this->belongsToMany(Category::Class, 'categoryid', 'categoryid');
+  public function gamecategories() {
+      return $this->belongsToMany(GameCategories::Class, 'game_categories', 'gameid', 'gameid');
   }
 
 }

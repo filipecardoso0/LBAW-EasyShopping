@@ -7,8 +7,8 @@
             <section class="flex flex-col lg:flex-row gap-4 justify-center flex-wrap mt-6 ml-6 mr-6 items-center">
                 @foreach($games as $game)
                     <article class="hover:brightness-50 transition duration-300 ease-in-out bg-gray-700 border-2 rounded-lg border-transparent">
-                        <!-- Game Image (Do this later) -->
-                        <a href="{{ route('game', $game->gameid) }}"><img class="w-50 h-70 border-2 rounded-lg border-transparent" src="https://picsum.photos/200/300" alt="Game Cover Image"></a>
+                        <!-- Game Image -->
+                        <a href="{{ route('game', $game->gameid) }}"><img class="w-48 h-48 border-2 rounded-lg border-transparent" src="{{ url('/images/games/game_'.$game->gameid.'.jpg')}}" alt="Game Cover Image"></a>
                         <!-- Game Info -->
                         <section class="p-2">
                             <a href="{{ route('game', $game->gameid) }}">

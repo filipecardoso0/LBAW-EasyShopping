@@ -11,9 +11,13 @@ class UserController extends Controller
         $this->middleware(['auth']);
     }
 
+    public function showProfilePage(){
+        return view('pages.userpage.profilepage');
+    }
+
     public function index(){
 
-        //Gets user orders and info abou the games he bought
+        //Gets user orders and info about the games he bought
         $query = DB::table('order_')
             ->select('order_.userid', 'order_.orderid', 'order_.type', 'order_.state', 'order_.value', 'order_.order_date', 'game.gameid', 'game.price', 'game.title')
             ->join('game_order', 'game_order.orderid', '=', 'order_.orderid')
@@ -21,7 +25,7 @@ class UserController extends Controller
             ->where('order_.userid', '=', auth()->user()->userid)
             ->get();
 
-        return view('pages.dashboard')
+        return view('pages.userpage.dashboard')
             ->with('data', $query);
     }
 }

@@ -13,6 +13,7 @@ class OverviewController extends Controller
         return view('pages.overview')
             ->with('gamesoons', $overview->getComingSoon(12))
             ->with('categories', $overview->getCategories(5))
-            ->with('bestsellers', $overview->getBestSellers(12));
+            ->with('bestsellers', $overview->getBestSellers(12))
+            ->with('latestgames', $overview->getLatestGames(12));
     }
 }

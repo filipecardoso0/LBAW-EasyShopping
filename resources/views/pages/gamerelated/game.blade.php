@@ -6,23 +6,30 @@
 
     <section class="flex flex-col">
         <section class="flex flex-col md:flex-row mt-8 ml-4">
-            <img class="w-15 h-18 lg:w-70 lg:h-100 mr-4 mb-4" src="https://picsum.photos/200/300" alt="Game Image">
+            <img class="w-15 h-18 lg:w-30 lg:h-48 mr-4 mb-4" src="{{ url('/images/games/game_'.$game->gameid.'.jpg')}}" alt="Game Image">
             <article class="ml-4 space-y-2">
                 <h1 class="text-amber-400 font-semibold text-2xl">{{ $game->title }}</h1>
                 <h2 class="text-neutral-50"><span class="text-amber-400 font-semibold text-xl">Release:</span> {{\Carbon\Carbon::parse($game->release_date)->format('d/m/Y')}}</h2>
                 <p class="text-amber-400 font-semibold">Classification:
-                    @for($i=0; $i<5; $i++)
-                        @if($i<round($game->classification))
-                            <span class="text-neutral-50"><i class="fa-solid fa-star"></i></span>
-                        @else
-                            <span class="text-neutral-50"><i class="fa-regular fa-star"></i></span>
-                        @endif
-                    @endfor
+                    @if($game->reviews->count())
+                        @for($i=0; $i<5; $i++)
+                            @if($i<round($game->classification))
+                                <span class="text-neutral-50"><i class="fa-solid fa-star"></i></span>
+                            @else
+                                <span class="text-neutral-50"><i class="fa-regular fa-star"></i></span>
+                            @endif
+                        @endfor
+                    @else
+                        <span class="text-neutral-50">No Reviews Yet</span>
+                    @endif
                 </p>
-                <p class="text-amber-400 font-semibold">Categories/Category:
-                    <span class="text-neutral-50">
-                    </span> <!-- TODO Adicionar hyperlink para a categoria -->
-                </p> <!--TODO Usar aquela cena da gramatica que o meu menino mostra no crash course de laravel t=3124s-->
+                <p class="text-amber-400 font-semibold">{{Str::plural('Category', $categories->count())}}:
+                    @foreach($categories as $category)
+                        <span class="text-neutral-50 mr-2">
+                            <a class="underline" href="#">{{$category->name}}</a>
+                        </span> <!-- TODO Adicionar hyperlink para a categoria -->
+                    @endforeach
+                </p>
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
                 <section class="flex flex-row mt-6 space-x-4">
                     @auth
@@ -48,7 +55,7 @@
         <section class="m-4">
             <h3 class="font-semibold text-neutral-50 text-lg underline">About this Game:</h3>
             <p class="mt-4 text-amber-400 bg-gray-900 p-2 border border-transparent border-solid rounded-md">
-                {{ $game->description }}
+                {!! nl2br($game->description) !!}
             </p>
         </section>
         <section class="mr-4 ml-4 mt-4 mb-8">
@@ -57,7 +64,7 @@
                 @foreach($game->reviews as $review)
                     <article class="flex flex-col m-4 bg-amber-400 p-2 border border-transparent border-solid rounded-md">
                         <section class="flex flex-row">
-                            <img class="w-8 h-8" src="{{ url('image/avatar.png') }}" alt="Avatar image">
+                            <img class="w-8 h-8" src="{{ url('images/avatar.png') }}" alt="Avatar image">
                             <p class="ml-2 text-neutral-50 font-bold">{{$review->user->username}}</p>
                             <p class="ml-2 text-neutral-50">Classification (In Stars Representation)</p>
                         </section>

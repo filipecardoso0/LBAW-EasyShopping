@@ -11,7 +11,6 @@
 |
 */
 // Home
-use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', 'OverviewController@index')->name('homepage');
 
@@ -21,8 +20,8 @@ Route::post('login', 'Auth\LoginController@login');
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
+Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
 
 // Games
 Route::get('bestsellers', 'GameController@showBestSellers')->name('bestsellers');
@@ -47,17 +46,21 @@ Route::get('guestCheckout', 'ShoppingCartController@guestItemstoCookie')->name('
 Route::get('checkout', 'OrderController@showPaymentGateway')->name('checkout');
 Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePayment');
 
-// Dashboard
+// User Dashboard
+Route::get('profilepage', 'UserController@showProfilePage')->name('userProfilePage');
 Route::get('profile', 'UserController@index')->name('userprofile');
 
 // Search
 Route::get('search', 'GameController@search')->name('search');
 
-// About Us
-Route::get('about', 'StaticPagesController@showAbout')->name('about');
+//Static Pages
+Route::get('about-us', 'StaticController@showAboutPage')->name('aboutpage'); //AboutUs
+Route::get('faq', 'StaticController@showFAQPage')->name('faqpage'); //FAQ
+Route::get('faq/account', 'StaticController@showFAQAccount')->name('faqaccount');//FAQ Account
+Route::get('faq/games', 'StaticController@showFAQGames')->name('faqgames');//FAQ Games
+Route::get('contacts', 'StaticController@showContactUsPage')->name('contactuspage')->middleware('auth'); //ContactUS
+Route::post('submitTicket', 'TicketController@storeTicket')->name('submitTicket');//Submits User Ticket on ContactUS page
+                                                                                  //TODO FINALIZE TICKET SYSTEM
 
-// FAQ
-Route::get('faq', 'StaticPagesController@showFaqs')->name('faq');
 
-// Contact Us
-Route::get('contacts', 'StaticPagesController@showContacts')->name('contacts');
+

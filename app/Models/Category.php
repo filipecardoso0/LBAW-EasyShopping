@@ -31,8 +31,8 @@ class Category extends Model
       'name',
   ];
 
-  //TODO REVER AS CATEGORIAS
-  public function games() {
-    return $this->belongsToMany(Game::Class, 'gameid', 'gameid');
+  //Useless, once Eloquent doesn't support Composite Keys
+  public function gamecategories() {
+    return $this->belongsToMany(GameCategories::Class, 'game_categories', 'categoryid');
   }
 }
