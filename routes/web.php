@@ -47,8 +47,9 @@ Route::get('checkout', 'OrderController@showPaymentGateway')->name('checkout');
 Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePayment');
 
 // User Dashboard
-Route::get('profilepage', 'UserController@showProfilePage')->name('userProfilePage');
-Route::get('profile', 'UserController@index')->name('userprofile');
+Route::get('profile', 'UserController@showProfilePage')->name('userprofile'); //Account Details
+Route::get('orders', 'UserController@showOrders')->name('userorders'); //Orders
+Route::get('wishlist', 'UserController@showWishlist')->name('userwishlist'); //Wishlist
 
 // Search
 Route::get('search', 'GameController@search')->name('search');
@@ -61,6 +62,9 @@ Route::get('faq/games', 'StaticController@showFAQGames')->name('faqgames');//FAQ
 Route::get('contacts', 'StaticController@showContactUsPage')->name('contactuspage')->middleware('auth'); //ContactUS
 Route::post('submitTicket', 'TicketController@storeTicket')->name('submitTicket');//Submits User Ticket on ContactUS page
                                                                                   //TODO FINALIZE TICKET SYSTEM
+//Add to Wishlist
+Route::post('addtowishlist', 'WishlistController@store')->name('addtowishlist');
+Route::delete('removefromwishlist', 'WishlistController@destroy')->name('removefromwishlist');
 
 
 

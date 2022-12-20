@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,17 +16,22 @@ class UserController extends Controller
         return view('pages.userpage.profilepage');
     }
 
-    public function index(){
+    //TODO TROCAR ESTE CODIGO PARA O CONTROLLER DA WISHLIST FAZ MAIS SENTIDO
+    public function showWishlist(){
+        //Gets user wishlist games
+        $games = User::getUserWishListGames();
 
-        //Gets user orders and info about the games he bought
-        $query = DB::table('order_')
-            ->select('order_.userid', 'order_.orderid', 'order_.type', 'order_.state', 'order_.value', 'order_.order_date', 'game.gameid', 'game.price', 'game.title')
-            ->join('game_order', 'game_order.orderid', '=', 'order_.orderid')
-            ->join('game', 'game.gameid', '=', 'game_order.gameid')
-            ->where('order_.userid', '=', auth()->user()->userid)
-            ->get();
+        return view('pages.userpage.wishlist')
+            ->with('games', $games);
+    }
+
+    //TODO CHANGE THIS LATER -> THE NAME OF THE FUNCTION ("INDEX") IS NOT ACCURATE
+    public function showOrders(){
+
+        $query = User::getUserGameOrders();
 
         return view('pages.userpage.dashboard')
             ->with('data', $query);
     }
+
 }

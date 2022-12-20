@@ -50,6 +50,50 @@ class Game extends Model
     return $query;
   }
 
+    //Fetches game info from the game with the biggest amount of sales to the one with the least amount of sales
+    public static function getBestSellersWithPagination(){
+        $query = DB::table('game')
+            ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'order_.state', (DB::raw('count(*) as salesnum')))
+            ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+            ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
+            ->where('order_.state', '=', 'true')
+            ->groupBy('game.gameid', 'order_.state')
+            ->orderByRaw('salesnum DESC')
+            ->paginate(12);
+
+        return $query;
+    }
+
+    //Fetch the info about First x Games with the highest ammount of sales
+    public static function getBestSellers(int $x){
+        //Fetches the game info from orders table join with game table in descending order and having state=true(have been bought)
+        if($x > 0){
+            //Select game_order.gameid, count(*) as salesgame from easyshopping.game_order Group by(gameid) Order by salesgame DESC;
+
+            $query = DB::table('game')
+                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', (DB::raw('count(*) as salesnum')))
+                ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+                ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
+                ->where('order_.state', '=', 'true')
+                ->groupBy('game.gameid')
+                ->orderByRaw('salesnum DESC')
+                ->take($x)
+                ->get();
+            return $query;
+        }
+
+        $query = DB::table('game')
+            ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'order_.state', (DB::raw('count(*) as salesnum')))
+            ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
+            ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
+            ->where('order_.state', '=', 'true')
+            ->groupBy('game.gameid', 'order_.state')
+            ->orderByRaw('salesnum DESC')
+            ->get();
+
+        return $query;
+    }
+
     //Eloquent Relational Mapping
 
   //Gets game reviews
@@ -71,7 +115,6 @@ class Game extends Model
       $game = Game::find($id);
       return $game->user->publisher_name;
   }
-
 
   /*
   Administrator

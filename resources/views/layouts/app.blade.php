@@ -60,7 +60,7 @@
               </li>
               @auth
                   <li>
-                      <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{ route('userProfilePage') }}">{{ auth()->user()->username }}</a>
+                      <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{ route('userprofile') }}">{{ auth()->user()->username }}</a>
                   </li>
                   <li>
                       <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{ route('logout') }}">Logout</a>

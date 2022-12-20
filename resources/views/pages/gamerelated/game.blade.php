@@ -3,6 +3,7 @@
 @section('title', $game->title)
 @section('content')
 @include('partials.breadcrumbs', $path = array($game->title => ''))
+<!--TODO FIX GAME PAGE HTML ON SMALL-MEDIUM SCREEENS -->
 
     <section class="flex flex-col">
         <section class="flex flex-col md:flex-row mt-8 ml-4">
@@ -37,14 +38,14 @@
                         @csrf
                         <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="submit" name="gameid" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
                     </form>
-                    <form action="#" method="POST">
+                    <form action="{{ route('addtowishlist') }}" method="POST">
                         @csrf
-                        <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="submit"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>
+                        <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="submit" name="gameid" value="{{ $game->gameid }}"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>
                     </form>
                     @endauth
                     @guest
                         <a href="{{ route('addToCartGuest', $game->gameid) }}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</a>
-                        <a href="#" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-heart"></i> Add to Wishlist</a>
+                        <a href="{{ route('login') }}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-heart"></i> Add to Wishlist</a>
                     @endguest
                 </section>
             </article>

@@ -2,22 +2,50 @@
 
 @section('content')
     <section class="flex flex-col flex-wrap">
-        <h1 class="text-center my-12 text-amber-400 text-5xl font-bold">Account Details</h1>
         <section class="flex flex-row">
-            <aside class="text-neutral-50 flex flex-col">
-                <ul class="space-y-4">
-                    <li><a href="#">Account Details</a></li>
-                    <li><a href="#">Orders</a></li>
-                    <li><a href="#">Wishlist</a></li>
-                    <li><a href="#">Library</a></li>
-                    <li><a href="#">Support Tickets</a></li>
-                </ul>
-            </aside>
-            <section class="mx-auto">
-                <p>Username: {{auth()->user()->username}}</p>
-                <p>Email: {{auth()->user()->email}}</p>
-                <p>Change Password</p>
+            @include('partials.userpage_aside')
+            <section class="mx-auto text-neutral-50 text-lg">
+                <h1 class="my-12 text-amber-400 text-2xl md:text-5xl font-bold" id="profilePage">Account Details</h1>
+                <section class="flex flex-col space-y-4">
+                    <p><a href="#"><span class="text-amber-400">Username</span>: {{auth()->user()->username}}<i class="ml-2 fa-solid fa-pen-to-square"></i></a></p>
+                    <p><a href="#"><span class="text-amber-400">Email</span>: {{auth()->user()->email}}<i class="ml-2 fa-solid fa-pen-to-square"></i></a></p>
+                    <p><a href="#">Change Password</a><i class="ml-2 fa-solid fa-lock"></i></p>
+                </section>
             </section>
         </section>
     </section>
+
+    <!-- Select Active Page on Aside -->
+    <!-- TODO RETIRAR ESTE CODIGO DEPOIS DAQUI (ARRUMAR TODO O CODIGO JS) -->
+    <script>
+
+        function setActive(){
+            const h1 = document.getElementById('profilePage')
+            if(h1.innerHTML == 'Account Details'){
+                document.querySelector('aside ul li:first-child').classList.add('underline')
+                document.querySelector('aside ul li:first-child').classList.add('text-amber-400')
+            }
+            else if(h1.innerHTML == 'Order History'){
+                document.querySelector('aside ul li:nth-child(2)').classList.add('underline')
+                document.querySelector('aside ul li:nth-child(2)').classList.add('text-amber-400')
+            }
+            else if(h1.innerHTML == 'Wishlist'){
+                document.querySelector('aside ul li:nth-child(2)').classList.add('underline')
+                document.querySelector('aside ul li:nth-child(2)').classList.add('text-amber-400')
+            }
+            else if(h1.innerHTML == 'Library'){
+                document.querySelector('aside ul li:nth-child(2)').classList.add('underline')
+                document.querySelector('aside ul li:nth-child(2)').classList.add('text-amber-400')
+            }
+            else if(h1.innerHTMl == 'Support Tickets'){
+                document.querySelector('aside ul li:last-child').classList.add('underline')
+                document.querySelector('aside ul li:last-child').classList.add('text-amber-400')
+            }
+        }
+
+        setActive()
+    </script>
+
+    <!-- MODAL FORM -->
+
 @endsection

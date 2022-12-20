@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -38,6 +39,29 @@ class User extends Authenticatable
     /* Eloquent Relational Mapping */
     public function userCarts() {
         return $this->hasMany('App\Models\ShoppingCart');
+    }
+
+    //Gets user orders and info about the games he bought
+    public static function getUserGameOrders(){
+        $query = DB::table('order_')
+                ->select('order_.userid', 'order_.orderid', 'order_.type', 'order_.state', 'order_.value', 'order_.order_date', 'game.gameid', 'game.price', 'game.title')
+                ->join('game_order', 'game_order.orderid', '=', 'order_.orderid')
+                ->join('game', 'game.gameid', '=', 'game_order.gameid')
+                ->where('order_.userid', '=', auth()->user()->userid)
+                ->get();
+
+        return $query;
+    }
+
+    //Gets user wishlist games
+    public static function getUserWishListGames(){
+        $query = DB::table('wishlist')
+                ->select('game.gameid', 'game.title', 'game.description', 'game.price')
+                ->join('game', 'game.gameid', '=', 'wishlist.gameid')
+                ->where('wishlist.userid', '=', auth()->user()->userid)
+                ->paginate(5);
+
+        return $query;
     }
 
     /*

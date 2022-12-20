@@ -39,12 +39,19 @@ class ShoppingCartController extends Controller
         $userid = $request->user()->userid;
         $gameprice = Game::find($gameid)->price;
 
-        //Insert data into the database
-        ShoppingCart::create([
-            'userid' => $userid,
-            'gameid' => $gameid,
-            'game_price' => $gameprice
-        ]);
+        $games = ShoppingCart::where('gameid', '=', $gameid)->where('userid', '=', $userid)->get();
+        if($games->count()){
+            //It has already been added to the user's wishlist
+            //TODO DISPLAY ERROR
+        }
+        else{
+            //Insert data into the database
+            ShoppingCart::create([
+                'userid' => $userid,
+                'gameid' => $gameid,
+                'game_price' => $gameprice
+            ]);
+        }
 
         return back();
     }

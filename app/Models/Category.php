@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-//TODO REVER OS METODOS DO BELONG TO E HAS MANY
 //TODO FINALIZAR CRUD REVIEWS
 //TODO ADICIONAR EDIT PROFILE
 

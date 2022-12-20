@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('partials.breadcrumbs', $path = array('Profile' => route('userprofile'), ' > Dashboard' => ''))
+@include('partials.breadcrumbs', $path = array('Profile' => route('userprofile'), ' > Orders' => ''))
     <section class="flex flex-col mt-4 items-center">
         <p class="font-semibold text-lg text-amber-400">Order History</p>
         @if($data->count())
