@@ -10,7 +10,7 @@
         <section class="flex flex-col lg:flex-row gap-4 justify-center flex-wrap mt-6 ml-6 mr-6 items-center">
                 @foreach($categories as $category)
                     <article class="hover:brightness-50 transition duration-300 ease-in-out bg-gray-700 border-2 rounded-lg border-transparent">
-                        <a href="#"><img class="w-ful h-ful" src="https://picsum.photos/200/300" alt="Category Image"></a>
+                        <a href="{{ route('gamecategories', $category->categoryid) }}"><img class="w-ful h-ful" src="https://picsum.photos/200/300" alt="Category Image"></a>
                         <section>
                             <a href="#">
                                 <p class="text-center text-neutral-50">

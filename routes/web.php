@@ -33,6 +33,7 @@ Route::get('details/{game_id}', 'GameController@index')->name('game');
 
 // Categories
 Route::get('categories', 'CategoryController@index')->name('categories');
+Route::get('category/{categoryid}', 'CategoryController@showCategoryGames')->name('gamecategories');
 
 // Shopping Cart
 Route::get('cart', 'ShoppingCartController@index')->name('shoppingcart'); //View Contents
@@ -62,9 +63,12 @@ Route::get('faq/games', 'StaticController@showFAQGames')->name('faqgames');//FAQ
 Route::get('contacts', 'StaticController@showContactUsPage')->name('contactuspage')->middleware('auth'); //ContactUS
 Route::post('submitTicket', 'TicketController@storeTicket')->name('submitTicket');//Submits User Ticket on ContactUS page
                                                                                   //TODO FINALIZE TICKET SYSTEM
-//Add to Wishlist
+//Wishlist
 Route::post('addtowishlist', 'WishlistController@store')->name('addtowishlist');
 Route::delete('removefromwishlist', 'WishlistController@destroy')->name('removefromwishlist');
+
+//Reviews
+Route::post('publishreview', 'ReviewController@store')->name('userpublishreview');
 
 
 

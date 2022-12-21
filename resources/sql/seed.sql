@@ -150,8 +150,9 @@ CREATE INDEX game_search_idx ON game USING GIN (tsvectors);
 -----------------------------------------
 -- TRIGGERS and UDFs
 -----------------------------------------
-
+-- TODO FIX THIS FUNCTION
 -- Sends a notification to the user that is the gamepublisher of the game reviewed
+/*
 CREATE OR REPLACE FUNCTION notifyReview()
 RETURNS TRIGGER AS
 $$
@@ -170,6 +171,8 @@ CREATE TRIGGER notify_review
 AFTER INSERT ON review
 FOR EACH ROW
 EXECUTE PROCEDURE notifyReview();
+
+ */
 
 -- Sends a notification to the user that the game on his wishlist is now on sale
 CREATE OR REPLACE FUNCTION notifyWishlist()
@@ -191,8 +194,9 @@ BEFORE UPDATE ON game
 FOR EACH ROW
 EXECUTE PROCEDURE notifyWishlist();
 
-
+--TODO FIX THIS FUNCTION
 -- It is not possible to review a game that hasn't been launched yet
+/*
 CREATE OR REPLACE FUNCTION reviewnotLaunched()
 RETURNS TRIGGER AS
 $$
@@ -233,9 +237,12 @@ CREATE TRIGGER review_publishedgame
 BEFORE INSERT ON review
 FOR EACH ROW
 EXECUTE PROCEDURE reviewPublishedGame();
+*/
 
 
 -- It is not possible to review a game that the user hasn't been bought yet
+-- TODO FIX THIS FUNCTION
+/*
 CREATE OR REPLACE FUNCTION reviewNotBought()
 RETURNS TRIGGER AS
 $$
@@ -253,14 +260,17 @@ END;
 $$
 LANGUAGE plpgsql;
 
+
 DROP TRIGGER IF EXISTS review_notbought ON review;
 CREATE TRIGGER review_notbought
 BEFORE INSERT ON review
 FOR EACH ROW
 EXECUTE PROCEDURE reviewNotBought();
+*/
 
-
+-- TODO FIX THIS FUNCTION
 -- When a new review on a certain game is posted the game classification is updated
+/*
 CREATE OR REPLACE FUNCTION updateClassification()
 RETURNS TRIGGER AS
 $$
@@ -273,6 +283,7 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
 
 DROP TRIGGER IF EXISTS update_classification ON review;
 CREATE TRIGGER update_classification
@@ -299,6 +310,7 @@ CREATE TRIGGER update_removedclassification
 AFTER DELETE ON review
 FOR EACH ROW
 EXECUTE PROCEDURE updateRemovedClassification();
+ */
 
 -----------------------------------------
 -- Transactions

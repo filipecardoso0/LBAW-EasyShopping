@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    //Gets all Categories in Pagination Mode
     public function index(){
         $categories = Category::paginate(4); //Gets all in pagination mode
-        return view('pages.category')
+        return view('pages.categories.category')
             ->with('categories', $categories);
     }
 
@@ -19,5 +20,10 @@ class CategoryController extends Controller
         }
 
         $categories = Category::get(); //Gets all in pagination mode
+    }
+
+    //Gets all Category Games in Pagination Mode
+    public function showCategoryGames($categoryid){
+        //TODO COMPLETE THIS
     }
 }
