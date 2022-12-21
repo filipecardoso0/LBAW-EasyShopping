@@ -37,7 +37,8 @@
             </li>
               <li>
                   <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{  route('shoppingcart') }}"><i class="fa-solid fa-cart-shopping"></i>
-                      <span class="text-amber-400">
+                      <span>
+                          <p class="text-amber-400 inline-flex" id="cartqty">
                           @auth
                               @if(\App\Models\ShoppingCart::userCartGamesCount()->count())
                                   @if((\App\Models\ShoppingCart::userCartGamesCount()[0]->cartgamescount) > 0)
@@ -56,6 +57,7 @@
                                   0
                               @endif
                           @endguest
+                          </p>
                       </span> Shopping Cart</a>
               </li>
               @auth

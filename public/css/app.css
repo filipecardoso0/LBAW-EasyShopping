@@ -526,11 +526,17 @@ video {
 .right-0 {
   right: 0px;
 }
+.top-0 {
+  top: 0px;
+}
 .z-30 {
   z-index: 30;
 }
 .z-0 {
   z-index: 0;
+}
+.float-left {
+  float: left;
 }
 .m-12 {
   margin: 3rem;
@@ -649,6 +655,9 @@ video {
 }
 .block {
   display: block;
+}
+.inline-block {
+  display: inline-block;
 }
 .flex {
   display: flex;
@@ -803,11 +812,17 @@ video {
 .self-end {
   align-self: flex-end;
 }
+.overflow-hidden {
+  overflow: hidden;
+}
 .overflow-x-hidden {
   overflow-x: hidden;
 }
 .overflow-y-hidden {
   overflow-y: hidden;
+}
+.break-keep {
+  word-break: keep-all;
 }
 .rounded-lg {
   border-radius: 0.5rem;
@@ -910,6 +925,9 @@ video {
 .to-gray-900 {
   --tw-gradient-to: #111827;
 }
+.bg-no-repeat {
+  background-repeat: no-repeat;
+}
 .object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -932,6 +950,9 @@ video {
 }
 .p-3 {
   padding: 0.75rem;
+}
+.p-0 {
+  padding: 0px;
 }
 .px-5 {
   padding-left: 1.25rem;
@@ -971,6 +992,9 @@ video {
 }
 .pb-6 {
   padding-bottom: 1.5rem;
+}
+.pb-5 {
+  padding-bottom: 1.25rem;
 }
 .text-center {
   text-align: center;
@@ -1063,6 +1087,9 @@ video {
 .underline {
   text-decoration-line: underline;
 }
+.no-underline {
+  text-decoration-line: none;
+}
 .decoration-amber-400 {
   text-decoration-color: #fbbf24;
 }
@@ -1133,6 +1160,13 @@ video {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
 }
+.hover\:no-underline:hover {
+  text-decoration-line: none;
+}
+.hover\:outline-none:hover {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
 .hover\:brightness-50:hover {
   --tw-brightness: brightness(.5);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -1154,6 +1188,9 @@ video {
 .focus\:bg-gray-400:focus {
   --tw-bg-opacity: 1;
   background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+.focus\:no-underline:focus {
+  text-decoration-line: none;
 }
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
@@ -1312,6 +1349,10 @@ video {
 
   .md\:flex-row {
     flex-direction: row;
+  }
+
+  .md\:justify-between {
+    justify-content: space-between;
   }
 
   .md\:gap-6 {

@@ -43,6 +43,7 @@ class ShoppingCartController extends Controller
         if($games->count()){
             //It has already been added to the user's wishlist
             //TODO DISPLAY ERROR
+            return 1;
         }
         else{
             //Insert data into the database
@@ -51,9 +52,10 @@ class ShoppingCartController extends Controller
                 'gameid' => $gameid,
                 'game_price' => $gameprice
             ]);
+
+            return 0;
         }
 
-        return back();
     }
 
     //Removes a game from the user shopping cart -> User is logged in
@@ -81,13 +83,15 @@ class ShoppingCartController extends Controller
         $cart = new ShoppingCartGuest($oldcart);
 
         //Inserts the new game
-        $cart->addItemToCart($game);
+        if($cart->addItemToCart($game) == 1){
+            $request->session()->put('shoppingcart', $cart);
+            return 1;
+        }
 
         //Creates a new session and stores the (new) cart details
         $request->session()->put('shoppingcart', $cart);
 
-        //Goes back to the game page that the user was previously in
-        return back();
+        return 0;
     }
 
     public function removeFromCartGuest(Request $request, int $gameid){
