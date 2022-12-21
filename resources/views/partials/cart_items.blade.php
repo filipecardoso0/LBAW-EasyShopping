@@ -4,18 +4,16 @@
         <a href="{{route('game', $item->gameid)}}">
         <p>{{ \App\Models\Game::getOwnerNameByGameId($item->gameid) }}</p>
         <p>{{ $item->title }}</p>
-            <p><span class="text-amber-400">Price:</span> {{ $item->price-($item->price*$item->discount) }} €</p></a>
+            <p>Price: <span class="text-amber-400">{{ $item->price-($item->price*$item->discount) }}</span> €</p></a>
         @auth
             <!-- {{ $total += $item->price-($item->price*$item->discount) }} -->
         @endauth
         @auth
-            <form action="{{ route('removefromcart') }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" name="gameid" value="{{ $item->gameid }}" class="hover:text-amber-400">Remove Product <i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="removeFromCartAuth()" value="{{ $item->gameid }}" class="hover:text-amber-400">Remove Product <i class="fa-solid fa-trash-can"></i></button>
                 @endauth
                 @guest
-                    <a href="{{ route('removeFromCartGuest', $item->gameid) }}" class="hover:text-amber-400">Remove Product <i class="fa-solid fa-trash-can"></i></a>
+                    <button onclick="removeFromCartGuest()" value="{{ $item->gameid }}" class="hover:text-amber-400">Remove Product <i class="fa-solid fa-trash-can"></i></button>
         @endguest
     </section>
+
 </article>

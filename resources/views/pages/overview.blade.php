@@ -66,7 +66,7 @@
         <p class="text-neutral-50 font-semibold text-2xl">Best Sellers <i class="fa-sharp fa-solid fa-fire-flame-curved text-amber-400"></i></p>
         @if($bestsellers->count())
             <!-- Game List -->
-            <section class="flex flex-col gap-4 justify-center flex-wrap md:flex-row mt-6">
+            <section class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-6">
                 <!-- Game -->
                 @foreach($bestsellers as $bestseller)
                     <article class="hover:brightness-50 transition duration-300 ease-in-out bg-gray-700 border-2 rounded-lg border-transparent">
@@ -100,7 +100,7 @@
             <p class="text-neutral-50 font-semibold text-2xl">Coming Soon ... <i class="fa-solid fa-hourglass-end text-amber-400"></i></p>
             @if($gamesoons->count())
             <!-- Game List -->
-            <section class="flex flex-col gap-4 justify-center flex-wrap md:flex-row mt-6">
+                <section class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-6">
                 <!-- Game -->
                 @foreach($gamesoons as $gamesoon)
                     <article class="hover:brightness-50 transition duration-300 ease-in-out bg-gray-700 border-2 rounded-lg border-transparent">
@@ -136,7 +136,7 @@
                 <!-- Category -->
                 @foreach($categories as $category)
                     <article class="p-2 bg-amber-400 border-solid rounded-md text-neutral-50 flex flex-col items-center mx-3 my-2 text-sm">
-                        <p>Category Icon/Image</p> <!-- Do this later -->
+                        <!-- TODO ADD HYPERLINK TO THE CATEGORY PAGE -->
                         <p>{{ $category->name }}</p>
                     </article>
                 @endforeach

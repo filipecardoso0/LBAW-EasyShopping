@@ -64,7 +64,7 @@ class ShoppingCartController extends Controller
             ->where('userid', '=', auth()->user()->userid)
             ->where('gameid', '=', $request->get('gameid'))
             ->delete();
-        return back();
+
     }
 
     //Creates a shopping Cart using sessions
@@ -115,8 +115,6 @@ class ShoppingCartController extends Controller
         //Creates a new session and stores the (new) cart details
         $request->session()->put('shoppingcart', $cart);
 
-        //Goes back to the game page that the user was previously in
-        return back();
     }
 
     /*
