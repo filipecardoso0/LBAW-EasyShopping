@@ -2,7 +2,7 @@
 
 @section('title', $game->title)
 @section('content')
-@include('partials.breadcrumbs', $path = array($game->title => ''))
+    @include('partials.breadcrumbs', $path = array($game->title => ''))
 
     <section class="flex flex-col">
         <section class="flex flex-col md:flex-row mt-8 ml-4">
@@ -12,7 +12,7 @@
                 <h1 class="text-amber-400 font-semibold text-2xl">{{ $game->title }}</h1>
                 <h2 class="text-neutral-50"><span class="text-amber-400 font-semibold text-xl">Release:</span> {{\Carbon\Carbon::parse($game->release_date)->format('d/m/Y')}}</h2>
                 <p class="text-amber-400 font-semibold">Classification:
-                    @if($game->reviews->count())
+                    @if($game->reviewsDesc->count())
                         @for($i=0; $i<5; $i++)
                             @if($i<round($game->classification))
                                 <span class="text-neutral-50"><i class="fa-solid fa-star"></i></span>
@@ -32,7 +32,7 @@
                     @endforeach
                 </p>
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
-                <p class="text-neutral-50 font-semibold">Price: <span class="text-amber-400">{{ $game->price }}</span></p>
+                <p class="text-neutral-50 font-semibold">Price: <span class="text-amber-400">{{ $game->price }}&euro;</span></p>
                 <section class="flex flex-row mt-6 space-x-4">
                     @auth
                         <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="button" onclick="addToCartAuth()" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
@@ -55,50 +55,73 @@
                 {!! nl2br($game->description) !!}
             </p>
         </section>
-        <
         <section class="mr-4 ml-4 mt-4 mb-8">
             <section class="flex flex-row justify-between">
-                <h4 class="font-semibold text-neutral-50 text-lg">{{Str::plural('Comment', $game->reviews->count())}}: {{$game->reviews->count()}}</h4>
+                <h4 class="font-semibold text-neutral-50 text-lg">{{Str::plural('Comment', $game->reviewsDesc->count())}}: {{$game->reviewsDesc->count()}}</h4>
                 @auth
-                    <button onclick="showReviewModalForm()" class="rounded-lg bg-gray-700 p-2 text-neutral-50 transition duration-300 ease-in-out hover:bg-amber-400">Post a review</button>
+                    @php
+                        //Asserts if user has already posted a review about the game
+                        $flag = false;
+                        foreach($game->reviewsDesc as $review){
+                            if($review->user->username === auth()->user()->username)
+                                $flag = true;
+                            else
+                                continue;
+                        }
+                    @endphp
+                    @if($flag === false)
+                        <button onclick="showReviewModalForm()" type="button" id="showmodalform" class="rounded-lg bg-gray-700 p-2 text-neutral-50 transition duration-300 ease-in-out hover:bg-amber-400">Post a review</button>
+                    @else
+                        <p class="text-amber-400 font-semibold underline reviewmessage">You have already posted a review</p>
+                    @endif
                 @endauth
                 @guest
                     <a href="{{route('login')}}" class="rounded-lg bg-gray-700 p-2 text-neutral-50 transition duration-300 ease-in-out hover:bg-amber-400">Post a review</a>
                 @endguest
             </section>
-            @if($game->reviews->count())
-                @foreach($game->reviews as $review)
-                    <article class="flex flex-col m-4 bg-amber-400 p-2 border border-transparent border-solid rounded-md">
-                        <section class="flex flex-row">
-                            <img class="w-8 h-8" src="{{ url('images/avatar.png') }}" alt="Avatar image">
-                            <p class="ml-2 text-neutral-50 font-bold">{{$review->user->username}}</p>
-                            <p class="ml-2 text-neutral-50">
-                                @for($i=1; $i<=5; $i++)
-                                    @if($i<=$review->rating)
-                                        <i class="fa-solid fa-star"></i>
-                                    @else
-                                        <i class="fa-regular fa-star"></i>
-                                    @endif
-                                @endfor
-                            </p>
-                        </section>
-                        <section class="flex flex-row justify-between text-neutral-50">
-                            <p class="mt-2 font-semibold">{{$review->comment}}</p>
-                            <p class="underline font-bold">{{\Carbon\Carbon::createFromTimeStamp(strtotime($review->date))->diffForHumans()}}</p>
-                        </section>
-                        <section class="flex flex-row justify-start text-neutral-50 mt-2 space-x-4">
-                            <button class="rounded px-4 py-2 bg-gray-800 hover:bg-blue-500 transition duration-300 ease-in-out">Edit</button>
-                            <button class="rounded px-4 py-2 bg-gray-800 hover:bg-red-500 transition duration-300 ease-in-out">Delete</button>
-                        </section>
-                    </article>
-                @endforeach
-            @else
-                <p class="text-center text-amber-400 font-semibold text-lg m-4">There are no comments yet.</p>
-            @endif
+            <section id="game-commentsection">
+                @if($game->reviewsDesc->count())
+                    @foreach($game->reviewsDesc as $review)
+                        <article class="flex flex-col m-4 bg-amber-400 p-2 border border-transparent border-solid rounded-md">
+                            <section class="flex flex-row">
+                                <img class="w-8 h-8" src="{{ url('images/avatar.png') }}" alt="Avatar image">
+                                <p class="ml-2 text-neutral-50 font-bold">{{$review->user->username}}</p>
+                                <p class="ml-2 text-neutral-50 stars">
+                                    @php $aux = 0; @endphp
+                                    @for($i=1; $i<=5; $i++)
+                                        @if($i<=$review->rating)
+                                            @php $aux++; @endphp
+                                            <i class="fa-solid fa-star"></i>
+                                        @else
+                                            <i class="fa-regular fa-star"></i>
+                                        @endif
+                                    @endfor
+                                    <input class="hidden reviewclassificationcomment" type="text" value="{{$aux}}">
+                                </p>
+                                @if($review->status === true)
+                                    <p class="font-bold underline text-neutral-50 ml-2">(Edited)</p>
+                                @endif
+                            </section>
+                            <section class="flex flex-row justify-between text-neutral-50">
+                                <p class="mt-2 font-semibold usercomment">{!! nl2br($review->comment) !!}</p>
+                                <p class="text-neutral-50 underline font-bold timecomment">{{\Carbon\Carbon::createFromTimeStamp(strtotime($review->date))->diffForHumans()}}</p>
+                            </section>
+                            <section class="flex flex-row justify-start text-neutral-50 mt-2 space-x-4">
+                                @if($review->user->username === auth()->user()->username)
+                                    <button onclick="gameEditReview()" type="button" class="rounded px-4 py-2 bg-gray-800 hover:bg-blue-500 transition duration-300 ease-in-out">Edit</button>
+                                    <button onclick="gameDeleteReview()" type="button" value="{{$game->gameid}}" class="rounded px-4 py-2 bg-gray-800 hover:bg-red-500 transition duration-300 ease-in-out">Delete</button>
+                                @endif
+                            </section>
+                        </article>
+                    @endforeach
+                @else
+                    <p id="game-nocomments" class="text-center text-amber-400 font-semibold text-lg m-4">There are no comments yet.</p>
+                @endif
+            </section>
         </section>
     </section>
 
-    <!-- MODAL REVIEW FORM -->
+    <!-- MODAL CREATE REVIEW FORM -->
     <section id="reviewmodal" class="flex justify-center items-center antialiased h-screen fixed top-0 left-0 right-0 z-50 hidden bg-black bg-opacity-60">
         <section class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl">
             <section
@@ -118,9 +141,11 @@
                 <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5">
                     <div class="w-full sm:w-1/2">
                         <p class="mb-2 font-semibold text-gray-700">Rating</p>
-                        @for($i=1; $i<=5; $i++)
-                            <i {{"id=star-" . $i}} onclick="updateReviewStars({{$i}})" class="fa-regular fa-star modalreviewstar text-xl"></i>
-                        @endfor
+                        <div>
+                            @for($i=1; $i<=5; $i++)
+                                <i {{"id=star-" . $i}} onclick="updateReviewStars({{$i}})" class="fa-regular fa-star modalreviewstar text-xl"></i>
+                            @endfor
+                        </div>
                         <input id="reviewclassificationvalue" type="text" value="0" class="hidden">
                     </div>
                 </div>
@@ -134,20 +159,220 @@
         </section>
     </section>
 
+    <!-- MODAL EDIT REVIEW FORM -->
+    <section id="editreviewmodal" class="flex justify-center items-center antialiased h-screen fixed top-0 left-0 right-0 z-50 hidden bg-black bg-opacity-60">
+        <section class="flex flex-col w-11/12 sm:w-5/6 lg:w-1/2 max-w-2xl mx-auto rounded-lg border border-gray-300 shadow-xl">
+            <section
+                class="flex flex-row justify-between p-6 bg-white border-b border-gray-200 rounded-tl-lg rounded-tr-lg"
+            >
+                <p class="font-semibold text-gray-800">Edit Review</p>
+                <button onclick="closeEditReviewModalForm()"><i class="fa-solid fa-xmark text-2xl hover:text-red-500 transition duration-150 ease-in-out"></i></button>
+            </section>
+            <div class="flex flex-col px-6 py-5 bg-gray-50">
+                <p class="mb-2 font-semibold text-gray-700">Comment</p>
+                <textarea
+                    type="text"
+                    id="textareaeditreviewcomment"
+                    placeholder="Type message..."
+                    class="p-5 mb-5 bg-white border border-gray-200 rounded shadow-sm h-36"
+                ></textarea>
+                <div class="flex flex-col sm:flex-row items-center mb-5 sm:space-x-5">
+                    <div class="w-full sm:w-1/2">
+                        <p class="mb-2 font-semibold text-gray-700">Rating</p>
+                        <div>
+                            @for($i=1; $i<=5; $i++)
+                                <i {{"id=star-" . $i}} onclick="updateReviewStars({{$i}})" class="fa-regular fa-star modalreviewstar text-xl"></i>
+                            @endfor
+                        </div>
+                        <input id="reviewclassificationvalue" type="text" value="0" class="hidden">
+                    </div>
+                </div>
+            </div>
+            <div
+                class="flex flex-row items-center justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg"
+            >
+                <button onclick="closeEditReviewModalForm()" class="font-semibold hover:text-neutral-50 text-gray-600 px-4 py-2 rounded hover:bg-red-500 transition duration-150 ease-in-out">Cancel</button>
+                <button onclick="submitEditReviewModalForm()" class="px-4 py-2 text-gray-600 hover:text-neutral-50 font-semibold hover:bg-green-700 rounded">Submit Changes</button>
+            </div>
+        </section>
+    </section>
+
     <!-- TODO COLOCAR NUM FICHEIRO JS -->
-    <!-- Add to cart AJAX request -->
     <script>
-
-        //TODO ASSERT IF USER HAS ALREADY REVIEWED THE GAME
-        //TODO EDIT REVIEW
-        //TODO DELETE REVIEW
-        //TODO INSERT REVIEW IN HTML AFTER SUBMISSION
-
         function encodeForAjax(data) {
             return Object.keys(data).map(function(k){
                 return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
             }).join('&')
         }
+
+        //Functions to format date
+        function padTo2Digits(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        function formatDate(date) {
+            return (
+                [
+                    date.getFullYear(),
+                    padTo2Digits(date.getMonth() + 1),
+                    padTo2Digits(date.getDate()),
+                ].join('-') +
+                ' ' +
+                [
+                    padTo2Digits(date.getHours()),
+                    padTo2Digits(date.getMinutes()),
+                    padTo2Digits(date.getSeconds()),
+                ].join(':')
+            );
+        }
+
+
+        //Delete Review
+        function gameDeleteReview(){
+
+            const btn = event.target
+            const gameid = parseInt(document.getElementById('game-gameid').value)
+            const btnsection = btn.parentElement
+            const article = btnsection.parentElement
+
+            //Perform AJAX Request to ReviewController
+            const xml = new XMLHttpRequest();
+            xml.open('DELETE', '{{route('userremovereview')}}', true)
+            xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
+            xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xml.send(encodeForAjax({gameid: gameid}))
+
+            //Remove comment from HTML
+            article.parentElement.removeChild(article)
+
+            //Update Comments count
+            const h4 = document.querySelector('h4')
+            let commentsqty = parseInt(h4.textContent.split(' ').pop())
+            commentsqty--
+            h4.textContent = 'Comments: ' + commentsqty.toString()
+
+            //If Comment count is 0
+            if(commentsqty == 0){
+                const p = document.createElement('p')
+                p.id = 'game-nocomments'
+                p.classList.add('text-center', 'text-amber-400', 'font-semibold', 'text-lg', 'm-4')
+                p.innerHTML = 'There are no comments yet.'
+                const section = document.getElementById('game-commentsection')
+                section.appendChild(p)
+            }
+
+            //Show again the Post a review button
+            const postbtn = document.createElement('button')
+            postbtn.setAttribute('onclick', 'showReviewModalForm()')
+            postbtn.type = 'button'
+            postbtn.id = 'showmodalform'
+            postbtn.classList.add('rounded-lg', 'bg-gray-700', 'p-2', 'text-neutral-50', 'transition', 'duration-300', 'ease-in-out', 'hover:bg-amber-400')
+            postbtn.textContent = 'Post a review'
+            h4.parentElement.appendChild(postbtn)
+
+            //Delete the "you have already posted a review" message
+            h4.parentElement.removeChild(document.querySelector('.reviewmessage'))
+        }
+
+        //Edit Review
+        function gameEditReview(){
+            //Opens Review Modal Form
+            showEditReviewModalForm()
+
+            const btn = event.target
+            const btnsection = btn.parentElement
+            const article = btnsection.parentElement
+            article.setAttribute('id','active') //Tags which comment we are updating
+
+            const textcomment = article.querySelector('.usercomment').innerHTML
+            const commentclassification = parseInt(article.querySelector('.reviewclassificationcomment').value)
+
+            //Fill in the text area
+            const textarea = document.getElementById('textareaeditreviewcomment')
+            textarea.value = textcomment
+
+            //Fill in Stars
+            updateReviewStars(commentclassification)
+        }
+
+        function submitEditReviewModalForm(){
+
+            //New comment and new classification
+            const finalcomment = document.getElementById('textareaeditreviewcomment').value
+            const finalrating = document.getElementById('reviewclassificationvalue').value
+            const gameid = parseInt(document.getElementById('game-gameid').value)
+
+            //Get Current date
+            const timenow = formatDate(new Date())
+
+            //Perform AJAX Request to ReviewController
+            const xml = new XMLHttpRequest();
+            xml.open('PUT', '{{route('userupdatereview')}}', true)
+            xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
+            xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xml.send(encodeForAjax({gameid: gameid, date: timenow, rating: finalrating, comment: finalcomment}))
+
+            // Fired once the request completes successfully
+            xml.onload = function(e) {
+                // Check if the request was a success
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    //Update Comment HTML
+                    const activecomment = document.getElementById('active')
+                    const textcomment = activecomment.querySelector('.usercomment')
+                    textcomment.innerHTML = finalcomment
+                    const timecomment = activecomment.querySelector('.timecomment')
+                    timecomment.innerHTML = 'Just Now'
+                    const stars = activecomment.querySelector('.stars')
+
+                    //Update Comment Stars
+                    let str = ''
+                    for(let i=1; i<=5; i++){
+                        if(i <= finalrating){
+                            str += '<i class="fa-solid fa-star ml-1"></i>'
+                        }
+                        else{
+                            str += '<i class="fa-regular fa-star ml-1"></i>'
+                        }
+                    }
+
+                    stars.innerHTML = str
+                    //Update comment classification on "hidden input"
+                    const input = document.createElement('input')
+                    input.classList.add('hidden', 'reviewclassificationcomment')
+                    input.type = 'text'
+                    input.value = finalrating.toString()
+                    stars.appendChild(input)
+
+                    //Adds "Edited" Tag to the comment
+                    const commentheader = activecomment.querySelector('section')
+                    const tag = document.createElement('p')
+                    tag.classList.add('font-bold', 'underline', 'text-neutral-50', 'ml-2')
+                    tag.innerHTML = '(Edited)'
+                    commentheader.appendChild(tag)
+
+                    //Closes Modal Form
+                    closeEditReviewModalForm()
+                }
+            }
+
+        }
+
+        //Close Review Modal Form
+        function closeEditReviewModalForm(){
+            //Untags the active comment
+            const activecomment = document.getElementById('active')
+            activecomment.removeAttribute('id')
+
+            const form = document.getElementById('editreviewmodal')
+            form.classList.add('hidden')
+        }
+
+        //Show Review Modal Form
+        function showEditReviewModalForm(){
+            const form = document.getElementById('editreviewmodal')
+            form.classList.remove('hidden')
+        }
+
 
         //Close Review Modal Form
         function closeReviewModalForm(){
@@ -168,12 +393,107 @@
 
             //Perform AJAX Post Request to ReviewController
             const xml = new XMLHttpRequest();
-            xml.open('post', '{{route('userpublishreview')}}', true)
+            xml.open('POST', '{{route('userpublishreview')}}', true)
             xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
             xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xml.send(encodeForAjax({gameid: gameid, rating: classification, comment: comment}))
 
-            closeReviewModalForm()
+            // Fired once the request completes successfully
+            xml.onload = function(e) {
+                // Check if the request was a success
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    //If comment count = 0 remove the "There are no comments yet" text
+                    const h4 = document.querySelector('h4')
+                    let commentsqty = parseInt(h4.textContent.split(' ').pop())
+                    const gamereviews = document.getElementById('game-commentsection')
+                    const textremove = document.getElementById('game-nocomments')
+                    if(textremove != null)
+                        gamereviews.removeChild(textremove)
+                    //Add comment to Page Html
+                    const article = document.createElement('article')
+                    article.classList.add('flex', 'flex-col', 'm-4', 'bg-amber-400', 'p-2', 'border', 'border-transparent', 'border-solid', 'rounded-md')
+                    const articlesection1 = document.createElement('section')
+                    articlesection1.classList.add('flex', 'flex-row')
+                    const userimg = document.createElement('img')
+                    userimg.classList.add('w-8', 'h-8')
+                    userimg.src = "{{url('images/avatar.png')}}"
+                    userimg.alt = "Avatar Image"
+                    articlesection1.appendChild(userimg)
+                    const p1 = document.createElement('p')
+                    const p2 = document.createElement('p')
+                    p1.classList.add('ml-2', 'text-neutral-50', 'font-bold')
+                    const username = document.getElementById('navusername').textContent
+                    p1.innerHTML = username
+                    p2.classList.add('ml-2', 'text-neutral-50', 'font-xl', 'stars')
+                    let str = ''
+                    for(let i=1; i<=5; i++){
+                        if(i<=classification){
+                            str += '<i class="fa-solid fa-star ml-1"></i>'
+                        }
+                        else{
+                            str += '<i class="fa-regular fa-star ml-1"></i>'
+                        }
+                    }
+
+                    p2.innerHTML = str
+                    articlesection1.appendChild(p1)
+                    articlesection1.appendChild(p2)
+                    const starsinput = document.createElement('input')
+                    starsinput.value = classification
+                    starsinput.type = 'text'
+                    starsinput.classList.add('hidden', 'reviewclassificationcomment')
+                    articlesection1.appendChild(starsinput)
+                    article.appendChild(articlesection1)
+                    const articlesection2 = document.createElement('section')
+                    articlesection2.classList.add('flex', 'flex-row', 'justify-between', 'text-neutral-50')
+                    const p3 = document.createElement('p')
+                    const p4 = document.createElement('p')
+                    p3.classList.add('mt-2', 'font-semibold', 'whitespace-pre-wrap', 'usercomment')
+                    p3.innerHTML = comment
+                    p4.classList.add('underline', 'font-bold', 'timecomment')
+                    p4.innerHTML = 'Just now'
+                    articlesection2.appendChild(p3)
+                    articlesection2.appendChild(p4)
+                    article.appendChild(articlesection2)
+                    const articlesection3 = document.createElement('section')
+                    articlesection3.classList.add('flex', 'flex-row', 'justify-start', 'text-neutral-50', 'mt-2', 'space-x-4')
+                    const btn1 = document.createElement('button')
+                    const btn2 = document.createElement('button')
+                    btn1.classList.add('rounded', 'px-4', 'py-2', 'bg-gray-800', 'hover:bg-blue-500', 'transition', 'duration-300', 'ease-in-out')
+                    btn2.classList.add('rounded', 'px-4', 'py-2', 'bg-gray-800', 'hover:bg-red-500', 'transition', 'duration-300', 'ease-in-out')
+                    btn1.textContent = 'Edit'
+                    btn2.textContent = 'Delete'
+                    btn1.setAttribute('onclick', 'gameEditReview()')
+                    btn2.setAttribute('onclick', 'gameDeleteReview()')
+                    articlesection3.appendChild(btn1)
+                    articlesection3.appendChild(btn2)
+                    article.appendChild(articlesection3)
+                    //Add as latest comment (Parent's first child)
+                    gamereviews.insertBefore(article, gamereviews.firstChild)
+
+                    //If there is the text there are no comments yet make it hidden
+                    const text = document.getElementById('game-nocomments')
+                    if(text != null)
+                        text.classList.add('hidden')
+
+                    //Updates comments number
+                    commentsqty++
+                    h4.textContent = 'Comments: ' + commentsqty.toString()
+
+                    //Removes Post a Review Button
+                    const openmodalformbtn = document.getElementById('showmodalform')
+                    const section = openmodalformbtn.parentElement
+                    section.removeChild(openmodalformbtn)
+
+                    //Display message saying the user has already posted a review
+                    const p = document.createElement('p')
+                    p.classList.add('text-amber-400', 'font-semibold', 'underline', 'reviewmessage')
+                    p.innerHTML = 'You have already posted a review'
+                    h4.parentElement.appendChild(p)
+
+                    closeReviewModalForm()
+                }
+            }
         }
 
 
@@ -181,10 +501,12 @@
         function updateReviewStars(numstar){
             const stars = document.querySelectorAll('.modalreviewstar')
             const starno = parseInt(numstar)
-            const classification = document.getElementById('reviewclassificationvalue')
-            classification.value = numstar
+            const classifications = document.querySelectorAll('#reviewclassificationvalue')
+            for(let classification of classifications){
+                classification.value = numstar
+            }
 
-            for(star of stars){
+            for(let star of stars){
                 let id = parseInt(star.id.slice(-1))
 
                 if(id <= starno){

@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
-    //TODO REVER A CENA DE IR BUSCAR AS REVIEWS DE UM JOGO À DATABASE. DEVE ESTAR AQUI COM O METODO INDEX
-
     public function store(Request $request){
 
         $validator = $request->validate([
@@ -25,6 +23,43 @@ class ReviewController extends Controller
             'rating' => (int)$request->get('rating')
         ]);
 
-        return back();
+    }
+
+    public function destroy(Request $request){
+
+        $validator = $request->validate([
+            'gameid' => 'required|integer'
+        ]);
+
+        Review::where('gameid', '=', $request->get('gameid'))
+            ->where('userid', '=', $request->user()->userid)
+            ->delete();
+
+    }
+
+    public function update(Request $request){
+
+        $validator = $request->validate([
+            'gameid' => 'required|integer',
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string',
+            'date' => 'required|string'
+        ]);
+
+        $gameid = $request->get('gameid');
+        $date = $request->get('date');
+        $comment = $request->get('comment');
+        $rating = $request->get('rating');
+
+        $updateDetails = [
+            'date' => $date,
+            'comment' => $comment,
+            'rating' => $rating,
+            'status' => true
+        ];
+
+        Review::where('gameid', '=', $gameid)
+                ->where('userid', '=', $request->user()->userid)
+                ->update($updateDetails);
     }
 }

@@ -6,10 +6,10 @@
         <section class="flex flex-col mb-8">
             <!-- Games -->
             @auth
-                @php $total = 0 @endphp
+                @php $total = 0; @endphp
                 @foreach($items as $item)
                     @include('partials.cart_items', [$item])
-                    @php $total += $item->price @endphp
+                    @php $total += $item->price; @endphp
                 @endforeach
             @endauth
             @guest

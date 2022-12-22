@@ -96,6 +96,11 @@ class Game extends Model
 
     //Eloquent Relational Mapping
 
+  //Gets game reviews in descending order by date (in order to get the latest comments first)
+  public function reviewsDesc(){
+      return $this->hasMany(Review::Class, 'gameid', 'gameid')->orderByRaw('date DESC');
+  }
+
   //Gets game reviews
   public function reviews() {
     return $this->hasMany(Review::Class, 'gameid', 'gameid');

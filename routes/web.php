@@ -69,6 +69,7 @@ Route::delete('removefromwishlist', 'WishlistController@destroy')->name('removef
 
 //Reviews
 Route::post('publishreview', 'ReviewController@store')->name('userpublishreview');
+Route::delete('removereview', 'ReviewController@destroy')->name('userremovereview');
+Route::put('editreview', 'ReviewController@update')->name('userupdatereview');
 
-
-
+//TODO TRANSFORMAR AS ROTAS DE AJAX NUMA API REST

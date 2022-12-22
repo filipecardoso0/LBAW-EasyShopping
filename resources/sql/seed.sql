@@ -55,7 +55,8 @@ CREATE TABLE review (
 	gameID INTEGER NOT NULL REFERENCES game (gameID) ON UPDATE CASCADE,
 	date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
 	comment TEXT NOT NULL,
-	rating INTEGER NOT NULL CONSTRAINT rating_ck CHECK (((rating > 0) AND (rating <= 5)))
+	rating INTEGER NOT NULL CONSTRAINT rating_ck CHECK (((rating > 0) AND (rating <= 5))),
+    status BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE wishlist (
@@ -349,6 +350,7 @@ language plpgsql;
 -----------------------------------------
 
 -- Populate Users Table
+-- TODO FIX PUBLISHER NAMES ACCORDING TO GAME'S NAME
 insert into users (email, username, password, type, publisher_name, banned) values ('user@example.com', 'user', '$2a$04$qmD/OKqa2xeSIRVz1URFXuw8Us9jz7UP4f3EugSFFRFjHGmdHnX5a', 'AuthUser', 'Crown Castle International Corporation', false);
 insert into users (email, username, password, type, publisher_name, banned) values ('iguildford0@domainmarket.com', 'hcurley0', 'BIwCug7Ev', 'Publisher', 'Crown Castle International Corporation', false);
 insert into users (email, username, password, type, publisher_name, banned) values ('dkinneally1@xrea.com', 'kbrecher1', 'eqkJTnUGf', 'AuthUser', 'support.com, Inc.', false);
@@ -538,6 +540,7 @@ insert into game_categories (gameID, categoryID) values (49, 10);
 insert into game_categories (gameID, categoryID) values (50, 2);
 
 -- Populate Table Review
+-- TODO FIX THIS INSERTS
 /* Take a look at it later
 insert into review (userID, gameID, date, comment, rating) values (12, 29, '2012-10-16', 'Its OK', 3.16);
 insert into review (userID, gameID, date, comment, rating) values (16, 33, '2008-02-14', 'Worth the shot', 2.98);
