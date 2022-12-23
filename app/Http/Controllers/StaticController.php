@@ -25,4 +25,8 @@ class StaticController extends Controller
     public function showFAQGames(){
         return view('static.faqgames');
     }
+
+    public function showSuccess(){
+        return view('static.successpage');
+    }
 }

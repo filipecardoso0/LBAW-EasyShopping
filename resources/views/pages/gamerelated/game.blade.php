@@ -4,9 +4,10 @@
 @section('content')
     @include('partials.breadcrumbs', $path = array($game->title => ''))
 
+    <!-- TODO ONLY ALLOW REVIEW IF THE GAME HAS BEEN BOUGHT BY THE USER -->
     <section class="flex flex-col">
-        <section class="flex flex-col md:flex-row mt-8 ml-4">
-            <img class="w-48 h-48 mr-4 mb-4" src="{{ url('/images/games/game_'.$game->gameid.'.jpg')}}" alt="Game Image">
+        <section class="flex flex-col lg:flex-row mt-8 ml-4">
+            <img class="w-48 h-48 mr-4 mb-4 ml-4" src="{{ url('/images/games/game_'.$game->gameid.'.jpg')}}" alt="Game Image">
             <article class="ml-4 space-y-2">
                 <input type="text" class="hidden" value="{{$game->gameid}}" id="game-gameid">
                 <h1 class="text-amber-400 font-semibold text-2xl">{{ $game->title }}</h1>
@@ -45,7 +46,92 @@
                 </section>
             </article>
 
-            <!-- TODO ADD Carousel With game detail photos -->
+            <!-- TODO COLOCAR ESTE CODIGO DE FORMA LIMPA SEPARADA POR FICHEIROS -->
+            <section class="lg:mx-auto lg:my-0 mx-4 my-4 max-w-md">
+                <div class="shadow-2xl relative">
+                    <!-- large image on slides -->
+                    <div class="mySlides hidden">
+                        <img src="{{ url('/images/gamevisuals/game'.$game->gameid.'_1.jpg')}}" class="w-full object-cover">
+                    </div>
+                    <div class="mySlides hidden">
+                        <img src="{{ url('/images/gamevisuals/game'.$game->gameid.'_2.jpg')}}" class="w-full object-cover">
+                    </div>
+                    <div class="mySlides hidden">
+                        <img src="{{ url('/images/gamevisuals/game'.$game->gameid.'_3.jpg')}}" class="w-full object-cover">
+                    </div>
+                    <div class="mySlides hidden">
+                        <img src="{{ url('/images/gamevisuals/game'.$game->gameid.'_4.jpg')}}" class="w-full object-cover">
+                    </div>
+                    <div class="mySlides hidden">
+                        <img src="{{ url('/images/gamevisuals/game'.$game->gameid.'_5.jpg')}}" class="w-full object-cover">
+                    </div>
+
+                    <!-- butttons -->
+                    <a class="absolute left-0 inset-y-0 flex items-center -mt-32 px-4 text-white hover:text-gray-800 cursor-pointer text-3xl font-extrabold" onclick="plusSlides(-1)">❮</a>
+                    <a class="absolute right-0 inset-y-0 flex items-center -mt-32 px-4 text-white hover:text-gray-800 cursor-pointer text-3xl font-extrabold" onclick="plusSlides(1)">❯</a>
+
+                    <!-- image description -->
+                    <div class="text-center text-white font-light tracking-wider bg-gray-800 py-2">
+                        <p id="caption"></p>
+                    </div>
+
+                    <!-- smaller images under description -->
+                    <div class="flex">
+                        <div>
+                            <img class="gamedetailsimage1 description h-24 opacity-50 hover:opacity-100 cursor-pointer" src="{{ url('/images/gamevisuals/game'.$game->gameid.'_1.jpg')}}" onclick="currentSlide(1)">
+                        </div>
+                        <div>
+                            <img class="gamedetailsimage2 description h-24 opacity-50 hover:opacity-100 cursor-pointer" src="{{ url('/images/gamevisuals/game'.$game->gameid.'_2.jpg')}}" onclick="currentSlide(2)">
+                        </div>
+                        <div>
+                            <img class="gamedetailsimage3 description h-24 opacity-50 hover:opacity-100 cursor-pointer" src="{{ url('/images/gamevisuals/game'.$game->gameid.'_3.jpg')}}" onclick="currentSlide(3)">
+                        </div>
+                        <div>
+                            <img class="gamedetailsimage4 description h-24 opacity-50 hover:opacity-100 cursor-pointer" src="{{ url('/images/gamevisuals/game'.$game->gameid.'_4.jpg')}}" onclick="currentSlide(4)">
+                        </div>
+                        <div>
+                            <img class="gamedetailsimage5 description h-24 opacity-50 hover:opacity-100 cursor-pointer" src="{{ url('/images/gamevisuals/game'.$game->gameid.'_5.jpg')}}" onclick="currentSlide(5)">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <script>
+                //JS to switch slides and replace text in bar//
+                var slideIndex = 1;
+                showSlides(slideIndex);
+
+                function plusSlides(n) {
+                    showSlides(slideIndex += n);
+                }
+
+                function currentSlide(n) {
+                    showSlides(slideIndex = n);
+                }
+
+                function showSlides(n) {
+                    var i;
+                    var slides = document.getElementsByClassName("mySlides");
+                    var dots = document.getElementsByClassName("description");
+                    var captionText = document.getElementById("caption");
+                    if (n > slides.length) {
+                        slideIndex = 1
+                    }
+                    if (n < 1) {
+                        slideIndex = slides.length
+                    }
+                    for (i = 0; i < slides.length; i++) {
+                        slides[i].style.display = "none";
+                    }
+                    for (i = 0; i < dots.length; i++) {
+                        dots[i].className = dots[i].className.replace(" opacity-100", "");
+                    }
+                    slides[slideIndex - 1].style.display = "block";
+                    dots[slideIndex - 1].className += " opacity-100";
+                    captionText.innerHTML = dots[slideIndex - 1].alt;
+                }
+            </script>
 
 
         </section>

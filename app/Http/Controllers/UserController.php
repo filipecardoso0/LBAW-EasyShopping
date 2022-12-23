@@ -30,7 +30,7 @@ class UserController extends Controller
 
         $query = User::getUserGameOrders();
 
-        return view('pages.userpage.dashboard')
+        return view('pages.userpage.userorders')
             ->with('data', $query);
     }
 

@@ -45,7 +45,7 @@ Route::get('guestCheckout', 'ShoppingCartController@guestItemstoCookie')->name('
 
 //Checkout
 Route::get('checkout', 'OrderController@showPaymentGateway')->name('checkout');
-Route::post('finalize', 'OrderController@finalizePayment')->name('finalizePayment');
+Route::post('finalize', 'OrderController@finalizeOrderPaypal')->name('finalizePayment');
 
 // User Dashboard
 Route::get('profile', 'UserController@showProfilePage')->name('userprofile'); //Account Details
@@ -63,6 +63,8 @@ Route::get('faq/games', 'StaticController@showFAQGames')->name('faqgames');//FAQ
 Route::get('contacts', 'StaticController@showContactUsPage')->name('contactuspage')->middleware('auth'); //ContactUS
 Route::post('submitTicket', 'TicketController@storeTicket')->name('submitTicket');//Submits User Ticket on ContactUS page
                                                                                   //TODO FINALIZE TICKET SYSTEM
+Route::get('purchasesuccess', 'StaticController@showSuccess')->name('successpage');
+
 //Wishlist
 Route::post('addtowishlist', 'WishlistController@store')->name('addtowishlist');
 Route::delete('removefromwishlist', 'WishlistController@destroy')->name('removefromwishlist');
