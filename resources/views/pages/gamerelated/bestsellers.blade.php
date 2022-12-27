@@ -29,7 +29,7 @@
                 @endforeach
             </section>
 
-            <!-- Categories Pagination -->
+            <!-- BestSellers Pagination -->
             <section class="self-end m-12">
                 {{ $games->links('pagination::tailwind') }}
             </section>

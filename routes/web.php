@@ -78,5 +78,8 @@ Route::put('editreview', 'ReviewController@update')->name('userupdatereview');
 
 //Admin Page
 Route::get('/admin/dashboard', 'UserController@showAdminDashboard')->name('admindashboard');
+Route::get('/admin/orders', 'OrderController@showAllOrders')->name('adminshoworders'); //List all orders
+Route::put('/admin/api', 'OrderController@updateOrderStatus')->name('adminupdateorderstate');  //Update order state
+Route::get('/admin/users', 'UserController@showAllUsers')->name('adminshowusers');
 
 //TODO TRANSFORMAR AS ROTAS DE AJAX NUMA API REST

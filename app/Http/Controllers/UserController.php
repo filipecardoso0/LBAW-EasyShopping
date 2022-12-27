@@ -16,6 +16,12 @@ class UserController extends Controller
         return view('pages.userpage.profilepage');
     }
 
+    public static function getUseridbyUsername($username){
+        $user = User::where('username', '=', $username)->get();
+
+        return $user;
+    }
+
     //TODO TROCAR ESTE CODIGO PARA O CONTROLLER DA WISHLIST FAZ MAIS SENTIDO
     public function showWishlist(){
         //Gets user wishlist games
@@ -35,6 +41,13 @@ class UserController extends Controller
 
     public function showAdminDashboard(){
         return view('pages.adminpage.dashboard');
+    }
+
+    public function showAllUsers(){
+        $users = User::get();
+
+        return view('pages.adminpage.showusers')
+            ->with('users', $users);
     }
 
 }

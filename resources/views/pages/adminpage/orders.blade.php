@@ -1,56 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- TODO ADD BREADCRUMBS -->
+
     <section class="flex flex-col flex-wrap mt-8">
 
         <!-- Page Title -->
-        <h1 class="text-center text-2xl font-bold text-neutral-50 mt-8">Dashboard</h1>
+        <h1 class="text-center text-2xl font-bold text-neutral-50 mt-8">Manage Order Status</h1>
 
-        <!-- Statistics -->
-        <section class="w-full flex flex justify-center items-center mt-8">
-            <section class="container flex flex-col gap-4 mx-8">
-                <p class="text-gray-100 font-semibold tracking-wider text-lg">Statistics:</p>
-                <section class="bg-gray-100 rounded-lg w-full h-auto py-4 flex flex-row justify-between sectionide-x sectionide-solid sectionide-gray-400">
-                    <section class="relative flex-1 flex flex-col gap-2 px-4">
-                        <label class="text-gray-800 text-base font-semibold tracking-wider">Users</label>
-                        <label class="text-green-800 text-4xl font-bold">{{\App\Models\User::count()}}</label>
-                    </section>
-                    <section class="relative flex-1 flex flex-col gap-2 px-4">
-                        <label class="text-gray-800 text-base font-semibold tracking-wider">Sales</label>
-                        <label class="text-green-800 text-4xl font-bold">{{\App\Models\Order::sum('value')}} &euro;</label>
-                    </section>
-                    <section class="relative flex-1 flex flex-col gap-2 px-4">
-                        <label class="text-gray-800 text-base font-semibold tracking-wider">Orders</label>
-                        <label class="text-green-800 text-4xl font-bold">{{\App\Models\Order::count()}}</label>
-                    </section>
-                </section>
-            </section>
-        </section>
-
-        <!-- Managment Options -->
-        <section class="w-full flex flex justify-center items-center mt-8">
-            <section class="container flex flex-col gap-4 mx-8">
-                <p class="text-gray-100 font-semibold tracking-wider text-lg">Managements Options:</p>
-                <section class="flex flex-col md:flex-row flex-wrap items-center justify-center md:space-x-6 md:space-y-0 space-y-6 w-full h-auto ">
-                    <section class="flex flex-col flex-wrap p-4 bg-gray-700 rounded-md text-amber-400 items-center space-y-2">
-                        <a class="hover:underline" href="#">Manage Products</a>
-                        <i class="fa-sharp fa-solid fa-gears"></i>
-                    </section>
-                    <section class="flex flex-col flex-wrap p-4 bg-gray-700 rounded-md text-amber-400 items-center space-y-2">
-                        <a class="hover:underline" href="{{route('adminshowusers')}}">Manage Users</a>
-                        <i class="fa-solid fa-users"></i>
-                    </section>
-                    <section class="flex flex-col flex-wrap p-4 bg-gray-700 rounded-md text-amber-400 items-center space-y-2">
-                        <a class="hover:underline" href="{{route('adminshoworders')}}">Manage Order Status</a>
-                        <i class="fa-solid fa-boxes-stacked"></i>
-                    </section>
-                </section>
-            </section>
-        </section>
-
-        <!-- RECENT ORDERS (20 Latest Orders) -->
-        @php $orders = \App\Models\Order::getOrdersWithDetail(20) @endphp
         <section class="w-full flex flex justify-center items-center mt-8 mb-16">
             <section class="container flex flex-col gap-4 mx-8">
                 <p class="text-gray-100 font-semibold tracking-wider text-lg">Recent Orders:</p>
@@ -111,14 +67,12 @@
                         </tbody>
                     </table>
                 </section>
-                <a href="{{route('adminshoworders')}}" class="text-amber-400 hover:underline tracking-wider self-end">View More</a>
+                <!-- Orders Pagination -->
+                <section class="self-end m-12">
+                    {{ $orders->links('pagination::tailwind') }}
+                </section>
             </section>
         </section>
-
-        <!-- TODO COMPLETE -->
-
-        <!-- RECENT TICKETS -->
-
     </section>
 
     <script>
@@ -250,6 +204,5 @@
             orderstatus.appendChild(section)
         }
     </script>
-
 
 @endsection

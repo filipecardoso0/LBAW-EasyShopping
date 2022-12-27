@@ -49,4 +49,33 @@ class OrderController extends Controller
 
     }
 
+    //Shows All Orders in Pagination Mode
+    public function showAllOrders(){
+        $orders = Order::getOrdersWithDetailAndPagination(50);
+
+        return view('pages.adminpage.orders')
+            ->with('orders', $orders);
+    }
+
+    public function updateOrderStatus(Request $request){
+
+        $validator = $request->validate([
+           'orderid' => 'required|integer',
+           'status' => 'required|string',
+           'username' => 'required|string'
+       ]);
+
+       $user = UserController::getUseridbyUsername($request->get('username'));
+       $userid =  $user[0]->userid;
+
+       $updateDetails = [
+           'state' => $request->get('status')
+       ];
+
+       Order::where('orderid', '=', $request->get('orderid'))
+           ->where('userid', '=', $userid)
+           ->update($updateDetails);
+
+    }
+
 }
