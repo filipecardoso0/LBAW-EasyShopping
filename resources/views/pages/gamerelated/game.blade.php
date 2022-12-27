@@ -31,14 +31,40 @@
                     @endforeach
                 </p>
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
-                <p class="text-neutral-50 font-semibold">Price: <span class="text-amber-400">{{ $game->price }}&euro;</span></p>
+                <p class="text-neutral-50 font-semibold">Price:
+                    <span class="text-amber-400">
+                        @if($game->price > 0)
+                        {{ $game->price }}&euro;
+                        @else
+                        Free
+                        @endif
+                    </span>
+                </p>
+                <p class="text-neutral-50 font-semibold">
+                    Stock:
+                    <span class="text-amber-400">
+                        @if($game->quantity > 0)
+                            {{$game->quantity . ' ' . Str::plural('unity', $game->quantity) . ' available'}}
+                        @else
+                            Out of Stock
+                        @endif
+                    </span>
+                </p>
                 <section class="flex flex-row mt-6 space-x-4">
                     @auth
-                        <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="button" onclick="addToCartAuth()" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @if($game->quantity > 0)
+                            <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="button" onclick="addToCartAuth()" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @else
+                            <button onclick="Swal.fire('Oops... This game is out of stock', 'Try adding it later when there is unities available','error')" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="button" value="{{ $game->gameid }}"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @endif
                         <button class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2" type="button" onclick="addToWishlist()" value="{{ $game->gameid }}"><i class="fa-solid fa-heart"></i> Add to Wishlist</button>
                     @endauth
                     @guest
-                        <button onclick="addToCartGuest()" value="{{$game->gameid}}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @if($game->quantity > 0)
+                            <button onclick="addToCartGuest()" value="{{$game->gameid}}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @else
+                            <button onclick="Swal.fire('Oops... This game is out of stock', 'Try adding it later when there is unities available','error')" value="{{$game->gameid}}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-cart-shopping"></i> Add to Cart</button>
+                        @endif
                         <a href="{{ route('login') }}" class="rounded-none bg-amber-400 text-neutral-50 lg:px-8 lg:py-2 px-4 py-2"><i class="fa-solid fa-heart"></i> Add to Wishlist</a>
                     @endguest
                 </section>

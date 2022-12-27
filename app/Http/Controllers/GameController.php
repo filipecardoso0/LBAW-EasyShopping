@@ -96,4 +96,18 @@ class GameController extends Controller
         echo json_encode($games);
     }
 
+    public static function updateProductStock($gameid){
+
+        $gameinfo = Game::find($gameid);
+
+        $gameinfo->quantity = $gameinfo->quantity-1;
+
+        $updateDetails = [
+            'quantity' => $gameinfo->quantity,
+        ];
+
+        Game::where('gameid', '=', $gameid)
+            ->update($updateDetails);
+    }
+
 }

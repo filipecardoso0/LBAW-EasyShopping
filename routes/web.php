@@ -77,9 +77,13 @@ Route::delete('removereview', 'ReviewController@destroy')->name('userremoverevie
 Route::put('editreview', 'ReviewController@update')->name('userupdatereview');
 
 //Admin Page
-Route::get('/admin/dashboard', 'UserController@showAdminDashboard')->name('admindashboard');
-Route::get('/admin/orders', 'OrderController@showAllOrders')->name('adminshoworders'); //List all orders
-Route::put('/admin/api', 'OrderController@updateOrderStatus')->name('adminupdateorderstate');  //Update order state
-Route::get('/admin/users', 'UserController@showAllUsers')->name('adminshowusers');
+Route::get('/admin/dashboard', 'UserController@showAdminDashboard')->name('admindashboard')->middleware('admin'); //Shows admin dashboard page
+Route::get('/admin/orders', 'OrderController@showAllOrders')->name('adminshoworders')->middleware('admin'); //List all orders
+Route::put('/admin/api', 'OrderController@updateOrderStatus')->name('adminupdateorderstate')->middleware('admin');  //Update order state
+Route::get('/admin/users', 'UserController@showAllUsers')->name('adminshowusers')->middleware('admin'); //Shows all Users in pagination mode
+Route::get('/admin/userinfo/', 'UserController@findUserbyUsername')->name('adminexactsearchusername')->middleware('admin'); //Exact Match Search by Exact Match Search
+Route::put('/user/updatebanstatues', 'UserController@updateBanStatus')->name('adminupdateuserbanstatus')->middleware('admin'); //Updates Ban Status of the User
+Route::get('/admin/form/createnewuser', 'UserController@showadminCreateUserAccount')->name('adminformcreateuseraccount')->middleware('admin');
+Route::post('/admin/createnewuser', 'UserController@storeadminCreateUserAccount')->name('admincreateuseraccount')->middleware('admin'); //Admin Create User Account
 
 //TODO TRANSFORMAR AS ROTAS DE AJAX NUMA API REST

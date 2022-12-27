@@ -42,11 +42,13 @@ class OrderController extends Controller
                 'gameid' => $cartitem->gameid,
                 'price' => $cartitem->price,
             ]);
+
+            //Diminish Stock Quantity
+            GameController::updateProductStock($cartitem->gameid);
         }
 
         //Erase Shopping Cart
         ShoppingCart::eraseShoppingCart($request->user()->userid);
-
     }
 
     //Shows All Orders in Pagination Mode

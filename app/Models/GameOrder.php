@@ -47,4 +47,13 @@ class GameOrder extends Model
   public function games(){
       return $this->hasMany('App\Models\Game', 'gameid', 'gameid');
   }
+
+  public static function orderGames($orderid){
+      $query = DB::table('game_order')
+                ->where('game_order.orderid', '=', $orderid)
+                ->join('game', 'game.gameid', '=', 'game_order.gameid')
+                ->get();
+
+      return $query;
+  }
 }

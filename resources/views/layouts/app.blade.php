@@ -14,6 +14,9 @@
    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- TailWind -->
    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> <!-- Font Awesome CDN -->
 
+   <!-- Sweet Alert -->
+   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
       <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951

@@ -80,7 +80,7 @@ class User extends Authenticatable
     }
 
     public function orders() {
-        return $this->hasMany('App\Models\Order', 'orderid');
+        return $this->hasMany('App\Models\Order', 'userid', 'userid');
     }
 
     public function notifications() {
