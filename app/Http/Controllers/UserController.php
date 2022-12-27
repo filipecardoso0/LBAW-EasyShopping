@@ -25,13 +25,16 @@ class UserController extends Controller
             ->with('games', $games);
     }
 
-    //TODO CHANGE THIS LATER -> THE NAME OF THE FUNCTION ("INDEX") IS NOT ACCURATE
     public function showOrders(){
 
         $query = User::getUserGameOrders();
 
         return view('pages.userpage.userorders')
             ->with('data', $query);
+    }
+
+    public function showAdminDashboard(){
+        return view('pages.adminpage.dashboard');
     }
 
 }

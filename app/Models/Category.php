@@ -17,6 +17,7 @@ class Category extends Model
      */
     protected $table = 'category';
 
+    protected $primaryKey = 'categoryid';
 
     // Don't add create and update timestamps in database.
     public $timestamps  = false;

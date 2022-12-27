@@ -3,8 +3,6 @@
 @section('title', $game->title)
 @section('content')
     @include('partials.breadcrumbs', $path = array($game->title => ''))
-
-    <!-- TODO ONLY ALLOW REVIEW IF THE GAME HAS BEEN BOUGHT BY THE USER -->
     <section class="flex flex-col">
         <section class="flex flex-col lg:flex-row mt-8 ml-4">
             <img class="w-48 h-48 mr-4 mb-4 ml-4" src="{{ url('/images/games/game_'.$game->gameid.'.jpg')}}" alt="Game Image">
@@ -28,8 +26,8 @@
                 <p class="text-amber-400 font-semibold">{{Str::plural('Category', $categories->count())}}:
                     @foreach($categories as $category)
                         <span class="text-neutral-50 mr-2">
-                            <a class="underline" href="#">{{$category->name}}</a>
-                        </span> <!-- TODO Adicionar hyperlink para a categoria -->
+                            <a class="underline" href="{{route('gamecategories', $category->categoryid)}}">{{$category->name}}</a>
+                        </span>
                     @endforeach
                 </p>
                 <p class="text-amber-400 font-semibold">Publisher: <span class="text-neutral-50 underline font-normal">{{ $game->user->publisher_name }}</span></p>
@@ -156,7 +154,11 @@
                         }
                     @endphp
                     @if($flag === false)
-                        <button onclick="showReviewModalForm()" type="button" id="showmodalform" class="rounded-lg bg-gray-700 p-2 text-neutral-50 transition duration-300 ease-in-out hover:bg-amber-400">Post a review</button>
+                        @if(\App\Models\GameOrder::userHasBoughtGame($game->gameid) === 1)
+                            <button onclick="showReviewModalForm()" type="button" id="showmodalform" class="rounded-lg bg-gray-700 p-2 text-neutral-50 transition duration-300 ease-in-out hover:bg-amber-400">Post a review</button>
+                        @else
+                            <p class="text-amber-400 font-semibold underline reviewmessage">You have to own the game to post a review</p>
+                        @endif
                     @else
                         <p class="text-amber-400 font-semibold underline reviewmessage">You have already posted a review</p>
                     @endif
@@ -619,7 +621,7 @@
 
             //INITIALIZE AJAX POST REQUEST TO ShoppingCartController
             const xml = new XMLHttpRequest();
-            xml.open('POST', '{{route('addtocart')}}', true) //TODO ADD ROUTE TO REMOVE FROM WISHLIST
+            xml.open('POST', '{{route('addtocart')}}', true)
             xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
             xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xml.send(encodeForAjax({gameid: gameid}))
@@ -654,7 +656,7 @@
 
             //INITIALIZE AJAX GET REQUEST TO ShoppingCartController
             const xml = new XMLHttpRequest();
-            xml.open('GET', '/addToCartGuest/' + gameid, true) //TODO ADD ROUTE TO REMOVE FROM WISHLIST
+            xml.open('GET', '/addToCartGuest/' + gameid, true)
             xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
             xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xml.send()
@@ -691,7 +693,7 @@
 
             //Initializes AJAX POST REQUEST TO WishListController
             const xml = new XMLHttpRequest();
-            xml.open('POST', '{{route('addtowishlist')}}', true) //TODO ADD ROUTE TO REMOVE FROM WISHLIST
+            xml.open('POST', '{{route('addtowishlist')}}', true)
             xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
             xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xml.send(encodeForAjax({gameid: gameid}))

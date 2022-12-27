@@ -80,4 +80,20 @@ class GameController extends Controller
         return view('pages.search', ['results' => $games]);
     }
 
+
+    public function searchAJAX(Request $request, $gametitle)
+    {
+
+        // Get the search value from the request
+        $search = $gametitle;
+
+        $games = Game::query()
+            ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$search}%")
+            ->orWhere('title', 'ILIKE', "%{$search}%")
+            ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$search}%")
+            ->get();
+
+        echo json_encode($games);
+    }
+
 }

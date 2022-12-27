@@ -14,9 +14,6 @@
    <link href="{{ asset('css/app.css') }}" rel="stylesheet"> <!-- TailWind -->
    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> <!-- Font Awesome CDN -->
 
-    <!-- Sweet Alert for Notifications -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
       <script type="text/javascript">
         // Fix for Firefox autofocus CSS bug
         // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
@@ -33,10 +30,7 @@
           <ul class="flex flex-col md:flex-row md:space-x-4 md:space-y-0 space-x-0 space-y-2 font-normal text-md flex-wrap items-center">
 
             <li>
-                <form action="{{ route('search') }}" method="GET" class="d-block border-0 justify-content-center align-items-center text-center text-body mx-auto">
-                    <input class="text-black" id="search" name="search" type="text" placeholder="Type here">
-                    <input class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" id="submit" type="submit" value="Search">
-                </form>
+                <input autocomplete="off" onfocus="showmodalsearchform()" class="px-2 text-black bg-white" type="text" placeholder="Looking for a game?">
             </li>
               <li>
                   <a class="transition duration-150 border-b-4 border-transparent hover:border-amber-400" href="{{  route('shoppingcart') }}"><i class="fa-solid fa-cart-shopping"></i>
@@ -103,5 +97,116 @@
                 </li>
           </ul>
       </footer>
+
+        @include('partials.modalsearch')
   </body>
+
+  <script>
+
+      //Clear search results
+      function hidemodalsearchform(){
+          let modalsearchform = document.getElementById('searchmodalform')
+          modalsearchform.classList.add('hidden')
+      }
+
+      function showmodalsearchform(){
+          let modalsearchform = document.getElementById('searchmodalform')
+          modalsearchform.classList.remove('hidden')
+          document.getElementById('modalsearchbar').focus()
+      }
+
+      //AJAX Search
+      function searchgame(){
+          const input = document.getElementById('modalsearchbar')
+
+          //Perform AJAX Request to GameController in order to attempt to find the game with that name
+          const xml = new XMLHttpRequest();
+          xml.open('GET', '/api/search/' + input.value, true)
+          xml.setRequestHeader("X-CSRF-TOKEN", document.head.querySelector("[name=csrf-token]").content);
+          xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xml.send()
+
+          // Fired once the request completes successfully
+          xml.onload = function(e) {
+              // Check if the request was a success
+              if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+
+                  //Clears search results from previous searches
+                  let searchres = document.getElementById('searchresults')
+                  searchres.textContent = ' '
+
+                  //Shows html
+                  if(searchres.classList.contains('hidden'))
+                      searchres.classList.remove('hidden')
+
+                  //Gets all games sent as response
+                  let games = JSON.parse(xml.responseText);
+
+                  let flag = false
+
+                  if(games.length === 0){
+                      //No results found HTML
+                      const p = document.createElement('p')
+                      p.innerHTML = 'No Results Found'
+                      searchres.appendChild(p)
+                      flag = true
+                  }
+
+                  console.log(games)
+
+                  let cntr = 0
+
+                  for(let game of games){
+                      if(cntr == 8)
+                          break
+                      //Append to searchresults the games
+                      //TODO ADD IMAGE LOADING USING JS
+                      const gamearticle = document.createElement('article')
+                      gamearticle.classList.add('flex', 'flex-row', 'flex-wrap', 'items-center', 'py-2', 'border-b-2')
+                      let a1 = document.createElement('a')
+                      a1.classList.add('ml-4')
+                      a1.textContent = game.title
+                      a1.href = '{{url('/')}}/details/'+game.gameid
+                      let a2 = document.createElement('a')
+                      let gameimg = document.createElement('img')
+                      gameimg.classList.add('w-16', 'h-16', 'ml-2')
+                      let imgurl = ' '
+                      a2.appendChild(gameimg)
+                      a2.href= '{{url('/')}}/details/'+game.gameid
+                      gamearticle.appendChild(a1)
+                      gamearticle.appendChild(a2)
+                      searchres.appendChild(gamearticle)
+                      cntr++
+                  }
+
+                  const searchbtn = document.getElementById('searchbtn')
+
+                  if(!flag && games.length >= 7){
+                      //View more btn
+                      const viewmore = document.createElement('a')
+                      viewmore.classList.add('hover:underline', 'text-amber-400', 'text-lg', 'py-4', 'self-end', 'mr-2')
+                      viewmore.textContent = 'View More'
+                      viewmore.href = '{{url('/')}}/search/?search='+ input.value
+                      searchres.appendChild(viewmore)
+                  }
+              }
+          }
+      }
+
+      //"Hides" modal form on background click
+      function modalsearchform_bgclick(){
+          const bg = document.getElementById("searchmodalform")
+
+          document.addEventListener("click", function(event){
+              if(event.target == bg){
+                  hidemodalsearchform()
+              }
+          })
+      }
+
+      modalsearchform_bgclick()
+
+  </script>
+
 </html>
+

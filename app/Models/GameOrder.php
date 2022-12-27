@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class GameOrder extends Model
 {
@@ -25,6 +26,19 @@ class GameOrder extends Model
     protected $fillable = [
       'orderid', 'gameid', 'price'
     ];
+
+    public static function userHasBoughtGame($gameid){
+        $query = Db::table('game_order')
+            ->join('order_', 'game_order.orderid', '=', 'order_.orderid')
+            ->where('userid', '=', auth()->user()->userid)
+            ->where('gameid', '=', $gameid)
+            ->get();
+
+        if($query->count() == 0)
+            return 0;
+        else
+            return 1;
+    }
 
   public function orders() {
     return $this->hasMany('App\Models\Order', 'orderID', 'orderID');

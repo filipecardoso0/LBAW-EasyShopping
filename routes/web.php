@@ -54,6 +54,8 @@ Route::get('wishlist', 'UserController@showWishlist')->name('userwishlist'); //W
 
 // Search
 Route::get('search', 'GameController@search')->name('search');
+// AJAX Search
+Route::get('api/search/{gametitle}', 'GameController@searchAJAX')->name('searchAJAX');
 
 //Static Pages
 Route::get('about-us', 'StaticController@showAboutPage')->name('aboutpage'); //AboutUs
@@ -73,5 +75,8 @@ Route::delete('removefromwishlist', 'WishlistController@destroy')->name('removef
 Route::post('publishreview', 'ReviewController@store')->name('userpublishreview');
 Route::delete('removereview', 'ReviewController@destroy')->name('userremovereview');
 Route::put('editreview', 'ReviewController@update')->name('userupdatereview');
+
+//Admin Page
+Route::get('/admin/dashboard', 'UserController@showAdminDashboard')->name('admindashboard');
 
 //TODO TRANSFORMAR AS ROTAS DE AJAX NUMA API REST

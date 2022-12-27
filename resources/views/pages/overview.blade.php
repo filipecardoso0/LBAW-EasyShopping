@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Carousel With the Latest Launched Games -->
-    <section class="flex flex-col flex-wrap">
+    <section class="relative flex flex-col flex-wrap">
         <p class="text-neutral-50 font-semibold text-2xl text-center mt-4">Latest Releases <i class="fa-solid fa-bolt text-amber-400"></i> </p>
         <div class="flex items-center justify-center w-full h-full py-24 sm:py-8 px-4">
             <div class="w-full relative flex items-center justify-center">
