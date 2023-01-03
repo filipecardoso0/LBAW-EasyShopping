@@ -233,8 +233,8 @@ paths:
 
  /removefromcart:
       delete:
-       operationId: R602
-       summary: 'R602: Remove Product from Shopping Cart'
+       operationId: R603
+       summary: 'R603: Remove Product from Shopping Cart'
        tags:
         - 'Module M06: Cart and Wishlist'
        responses:
@@ -247,8 +247,8 @@ paths:
 
  /addToCartGuest/{game_id}:
       get:
-          operationId: R601
-          summary: 'R601: Add Product to Shopping Cart	'
+          operationId: R604
+          summary: 'R604: Add Product to Shopping Cart	'
           description: 'Store Cart Contents (Guest Only). Access: PUB'
           tags:
             - 'Module M06: Cart and Wishlist'
@@ -258,8 +258,8 @@ paths:
 
  /removeFromCart{game_id}:
       get:
-          operationId: R602
-          summary: 'R602: Remove Product from Shopping Cart (Guest Only). Access: PUB'
+          operationId: R605
+          summary: 'R605: Remove Product from Shopping Cart (Guest Only). Access: PUB'
           tags:
             - 'Module M06: Cart and Wishlist'
           tags:
@@ -270,7 +270,7 @@ paths:
 
  /guestCheckout:
       get:
-          operationId: R603
+          operationId: R606
           summary: 'Checkout Form'
           description: 'Adds session cart items to a cookie in order to store this values temporarily. Access: PUB'
           tags:
@@ -281,7 +281,7 @@ paths:
 
  /checkout:
       get:
-          operationId: R603
+          operationId: R607
           summary: 'Checkout Form'
           description: 'Show the checkout page. Access: PUB'
           tags:
@@ -292,8 +292,8 @@ paths:
 
  /finalize:
       post:
-          operationId: R604
-          summary: 'R604: Checkout Action	'
+          operationId: R608
+          summary: 'R608: Checkout Action	'
           description: 'Checkout the items in the shopping cart. Access: USR'
           tags:
             - 'M06: Cart and Wishlist'
@@ -330,8 +330,8 @@ paths:
 
  /orders:
       get:
-          operationId: R605
-          summary: 'R605: View user orders	'
+          operationId: R609
+          summary: 'R609: View user orders	'
           description: 'View user orders. Access: USR, ADM, PUBLISHER'
           tags:
             - 'Module M06: Cart and Wishlist'
@@ -341,7 +341,7 @@ paths:
 
  /wishlist:
       get:
-          operationId: R606
+          operationId: R610
           summary: 'R606: View user wishlist	'
           description: 'View user wishlist. Access: USR, ADM, PUBLISHER'
           tags:
@@ -485,18 +485,18 @@ paths:
 
  /removereview:
       delete:
-       operationId: R402
+          operationId: R402
           summary: 'R402: Remove a review	'
           description: 'Remove a review. Access: USR, ADM, PUBLISHER'
           tags:
             - 'Module M04: Product and Reviews'
-       responses:
-        '201' :
-           description: 'Review successfuly removed'
-        '404' :
-           description: 'Review not found'
-        '401' :
-           description: 'Unauthorized Operation'
+          responses:
+            '201' :
+              description: 'Review successfuly removed'
+            '404' :
+              description: 'Review not found'
+            '401' :
+              description: 'Unauthorized Operation'
 
  /admin/dashboard:
       get:
