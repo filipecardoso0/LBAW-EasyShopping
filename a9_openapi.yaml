@@ -216,21 +216,6 @@ paths:
           tags:
             - 'Module M06: Cart and Wishlist'
 
-          requestBody:
-            required: true
-            content:
-              application/x-www-form-urlencoded:
-                schema:
-                  type: object
-                  properties:
-                    email:
-                      type: string
-                    password:
-                      type: string
-                  required:
-                        - email
-                        - password
-
           responses:
             '302':
               description: 'Redirect after processing the cart.'
@@ -428,21 +413,6 @@ paths:
           tags:
             - 'Module M06: Cart and Wishlist'
 
-          requestBody:
-            required: true
-            content:
-              application/x-www-form-urlencoded:
-                schema:
-                  type: object
-                  properties:
-                    email:
-                      type: string
-                    password:
-                      type: string
-                  required:
-                        - email
-                        - password
-
           responses:
             '302':
               description: 'Redirect after processing the wishlist.'
@@ -583,7 +553,7 @@ paths:
             '203':
               description: 'Ok. Show user page.'
 
- /publishreview:
+ /admin/createnewuser:
       post:
           operationId: R305
           summary: 'R305: Create new user account	'
@@ -620,4 +590,4 @@ paths:
                     302Error:
                       description: 'Redirect to all users page.'
                       value: '/admin/users'
-                      
+
