@@ -203,7 +203,7 @@ paths:
           summary: 'R602: View contents of Shopping Cart	'
           description: 'View contents of cart. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           responses:
             '203':
               description: 'Ok. Show cart UI.'
@@ -214,7 +214,7 @@ paths:
           summary: 'R601: Add Product to Shopping Cart	'
           description: 'Stores Cart Contents. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
 
           responses:
             '302':
@@ -236,7 +236,7 @@ paths:
        operationId: R603
        summary: 'R603: Remove Product from Shopping Cart'
        tags:
-        - 'Module M06: Cart and Wishlist'
+        - 'M06: Cart and Wishlist'
        responses:
         '201' :
            description: 'Game successfuly removed'
@@ -251,7 +251,7 @@ paths:
           summary: 'R604: Add Product to Shopping Cart	'
           description: 'Store Cart Contents (Guest Only). Access: PUB'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           responses:
             '203':
               description: 'Ok. Show cart UI.'
@@ -261,9 +261,9 @@ paths:
           operationId: R605
           summary: 'R605: Remove Product from Shopping Cart (Guest Only). Access: PUB'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           responses:
             '203':
               description: 'Ok. Show cart UI.'
@@ -334,7 +334,7 @@ paths:
           summary: 'R609: View user orders	'
           description: 'View user orders. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           responses:
             '203':
               description: 'Ok. Show orders UI.'
@@ -345,7 +345,7 @@ paths:
           summary: 'R606: View user wishlist	'
           description: 'View user wishlist. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
           responses:
             '203':
               description: 'Ok. Show wishlist UI.'
@@ -356,7 +356,7 @@ paths:
           summary: 'R501: View About us page	'
           description: 'View About us page. Access: PUB'
           tags:
-            - 'Module M05: Static Pages'
+            - 'M05: Static Pages'
           responses:
             '203':
               description: 'Ok. Show about-us page.'
@@ -367,7 +367,7 @@ paths:
           summary: 'R502: View general FAQ page	'
           description: 'View general FAQ page. Access: PUB'
           tags:
-            - 'Module M05: Static Pages'
+            - 'M05: Static Pages'
           responses:
             '203':
               description: 'Ok. Show general FAQ page.'
@@ -378,7 +378,7 @@ paths:
           summary: 'R503: View account FAQ page	'
           description: 'View account FAQ page. Access: PUB'
           tags:
-            - 'Module M05: Static Pages'
+            - 'M05: Static Pages'
           responses:
             '203':
               description: 'Ok. Show account FAQ page.'
@@ -389,7 +389,7 @@ paths:
           summary: 'R504: View games FAQ page	'
           description: 'View games FAQ page. Access: PUB'
           tags:
-            - 'Module M05: Static Pages'
+            - 'M05: Static Pages'
           responses:
             '203':
               description: 'Ok. Show games FAQ page.'
@@ -400,7 +400,7 @@ paths:
           summary: 'R505: View contacts page	'
           description: 'View contacts page. Access: PUB'
           tags:
-            - 'Module M05: Static Pages'
+            - 'M05: Static Pages'
           responses:
             '203':
               description: 'Ok. Show contacts page.'
@@ -411,7 +411,7 @@ paths:
           summary: 'R607: Add Product to wishlist	'
           description: 'Add Product to wishlist. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M06: Cart and Wishlist'
+            - 'M06: Cart and Wishlist'
 
           responses:
             '302':
@@ -433,7 +433,7 @@ paths:
        operationId: R608
        summary: 'R608: Remove Product from wishlist'
        tags:
-        - 'Module M06: Cart and Wishlist'
+        - 'M06: Cart and Wishlist'
        responses:
         '201' :
            description: 'Game successfuly removed'
@@ -448,7 +448,7 @@ paths:
           summary: 'R401: Publish a review	'
           description: 'Publish a review. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M04: Product and Reviews'
+            - 'M04: Product and Reviews'
 
           requestBody:
             required: true
@@ -489,7 +489,7 @@ paths:
           summary: 'R402: Remove a review	'
           description: 'Remove a review. Access: USR, ADM, PUBLISHER'
           tags:
-            - 'Module M04: Product and Reviews'
+            - 'M04: Product and Reviews'
           responses:
             '201' :
               description: 'Review successfuly removed'
@@ -504,7 +504,7 @@ paths:
           summary: 'R301: Show admin dashboard page	'
           description: 'Shows admin dashboard page. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
           responses:
             '203':
               description: 'Ok. Show dashboard page.'
@@ -515,7 +515,7 @@ paths:
           summary: 'R302: List all orders	'
           description: 'Lists all orders. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
           responses:
             '203':
               description: 'Ok. Show orders page.'
@@ -526,7 +526,7 @@ paths:
           summary: 'R303: Show all Users	'
           description: 'Shows all Users in pagination mode. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
           responses:
             '203':
               description: 'Ok. Show users page.'
@@ -537,7 +537,7 @@ paths:
           summary: 'R304: Show User INfo	'
           description: 'Shows User info. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
           responses:
             '203':
               description: 'Ok. Show user page.'
@@ -548,7 +548,7 @@ paths:
           summary: 'R305: Create new user account	'
           description: 'Creates new user account. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
           responses:
             '203':
               description: 'Ok. Show user page.'
@@ -559,7 +559,7 @@ paths:
           summary: 'R305: Create new user account	'
           description: 'Creates new user account. Access: ADM'
           tags:
-            - 'Module M03: Management Area'
+            - 'M03: Management Area'
 
           requestBody:
             required: true
