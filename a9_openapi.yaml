@@ -18,7 +18,7 @@ tags:
  - name: 'M02: Products and Categories'
  - name: 'M03: Management Area'
  - name: 'M04: Product and Reviews'
- - name: 'M05: Static pages'
+ - name: 'M05: Static Pages'
  - name: 'M06: Cart and Wishlist'
 
 paths:
@@ -407,8 +407,8 @@ paths:
 
  /addtowishlist:
       post:
-          operationId: R607
-          summary: 'R607: Add Product to wishlist	'
+          operationId: R611
+          summary: 'R611: Add Product to wishlist	'
           description: 'Add Product to wishlist. Access: USR, ADM, PUBLISHER'
           tags:
             - 'M06: Cart and Wishlist'
@@ -430,8 +430,8 @@ paths:
 
  /removefromwishlist:
       delete:
-       operationId: R608
-       summary: 'R608: Remove Product from wishlist'
+       operationId: R612
+       summary: 'R612: Remove Product from wishlist'
        tags:
         - 'M06: Cart and Wishlist'
        responses:
