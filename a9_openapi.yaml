@@ -166,8 +166,8 @@ paths:
 
  /details/{game_id}:
       get:
-          operationId: R401
-          summary: 'R401: View Game Details'
+          operationId: R403
+          summary: 'R403: View Game Details'
           description: 'Provide a specific game page. Access: PUB'
           tags:
             - 'M04: Product and Reviews'
