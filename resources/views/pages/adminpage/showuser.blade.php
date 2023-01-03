@@ -9,7 +9,7 @@
                 <section class="container flex flex-col gap-4 mx-8">
                     <section class="flex flex-row flex-wrap space-x-4">
                         <p>Email: {{$user[0]->email}}</p>
-                        <p></p>
+                        <!-- TODO MODIFY THE REST OF THE DETAILS -->
                     </section>
                     <p class="text-gray-100 font-semibold tracking-wider text-lg">Purchase History:</p>
                     <section class="w-full h-auto">

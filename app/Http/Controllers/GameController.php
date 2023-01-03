@@ -21,7 +21,7 @@ class GameController extends Controller
     }
 
     public function showAll(){
-        $games = Game::orderBy('title')->paginate(12);
+        $games = Game::orderBy('title')->get();
         return view('pages.gamerelated.games')
             ->with('games', $games);
     }
@@ -108,6 +108,64 @@ class GameController extends Controller
 
         Game::where('gameid', '=', $gameid)
             ->update($updateDetails);
+    }
+
+    /* FILTER FUNCTIONS */
+
+    public function showGamesHigh2Low(){
+
+        $games = Game::query()->orderByRaw('price DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesLow2High(){
+
+        $games = Game::query()->orderByRaw('price ASC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesbyDiscount(){
+        $games = Game::query()->orderByRaw('discount DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesbyLatestRelease(){
+        $games = Game::query()->orderByRaw('release_date DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showBestReviewed(){
+        $games = Game::query()->orderByRaw('classification DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameStartingAtPrice($price){
+        $games = Game::query()->where('price', '>=', $price)->orderByRaw('price ASC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameBelowPrice($price){
+        $games = Game::query()->where('price', '<=', $price)->orderByRaw('price DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameBetweenPrice($pricelow, $pricehigh){
+        $games = Game::query()->where('price', '>=', $pricelow)->where('price', '<=', $pricehigh)->get();
+
+        return json_encode($games);
+    }
+
+    public function showAllGames(){
+        $games = Game::query()->get();
+
+        return json_encode($games);
     }
 
 }

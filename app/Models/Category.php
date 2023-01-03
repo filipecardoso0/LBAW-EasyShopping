@@ -31,6 +31,13 @@ class Category extends Model
       'name',
   ];
 
+    //Get all Game Categories
+    public static function getAllCategories(){
+        $query = Category::get();
+
+        return $query;
+    }
+
   //Useless, once Eloquent doesn't support Composite Keys
   public function gamecategories() {
     return $this->belongsToMany(GameCategories::Class, 'game_categories', 'categoryid');

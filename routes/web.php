@@ -34,6 +34,7 @@ Route::get('details/{game_id}', 'GameController@index')->name('game');
 // Categories
 Route::get('categories', 'CategoryController@index')->name('categories');
 Route::get('category/{categoryid}', 'CategoryController@showCategoryGames')->name('gamecategories');
+Route::get('api/category/{categoryid}', 'CategoryController@ApiGetCategoryGames')->name('apigamecategories');
 
 // Shopping Cart
 Route::get('cart', 'ShoppingCartController@index')->name('shoppingcart'); //View Contents
@@ -85,5 +86,17 @@ Route::get('/admin/userinfo/', 'UserController@findUserbyUsername')->name('admin
 Route::put('/user/updatebanstatues', 'UserController@updateBanStatus')->name('adminupdateuserbanstatus')->middleware('admin'); //Updates Ban Status of the User
 Route::get('/admin/form/createnewuser', 'UserController@showadminCreateUserAccount')->name('adminformcreateuseraccount')->middleware('admin');
 Route::post('/admin/createnewuser', 'UserController@storeadminCreateUserAccount')->name('admincreateuseraccount')->middleware('admin'); //Admin Create User Account
+
+//Filters
+Route::get('/api/games/desc', 'GameController@showGamesHigh2Low')->name('high2lowfilter')->middleware('admin');
+Route::get('/api/games/asc', 'GameController@showGamesLow2High')->name('low2highfilter')->middleware('admin');
+Route::get('/api/games/discount', 'GameController@showGamesbyDiscount')->name('discountbest')->middleware('admin');
+Route::get('/api/games/latestreleases', 'GameController@showGamesbyLatestRelease')->name('orderlatestreleases')->middleware('admin');
+Route::get('/api/games/bestreviewed', 'GameController@showBestReviewed')->name('orderbestreviewed')->middleware('admin');
+Route::get('/api/games/{startprice}', 'GameController@getGameStartingAtPrice')->name('getgamestartingatprice')->middleware('admin');
+Route::get('/api/games/max/{startprice}', 'GameController@getGameBelowPrice')->name('getgamebelowprice')->middleware('admin');
+Route::get('/api/games/{startprice}/{maxprice}', 'GameController@getGameBetweenPrice')->name('getgamebetweenprice')->middleware('admin');
+Route::get('/api(games/', 'GameController@showAllGames')->name('getallgames')->middleware('admin');
+
 
 //TODO TRANSFORMAR AS ROTAS DE AJAX NUMA API REST

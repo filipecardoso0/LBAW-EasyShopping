@@ -45,4 +45,17 @@ class CategoryController extends Controller
             ->with('categorydata', $categorydata);
     }
 
+    //Gets all Category Games in Pagination Mode
+    public function ApiGetCategoryGames($categoryid){
+
+        $games = Category::query()
+            ->selectRaw('game.gameid, game.title, game.description, game.price, game.release_date, game.classification, game.discount')
+            ->join('game_categories', 'game_categories.categoryid', '=', 'category.categoryid')
+            ->join('game', 'game.gameid', '=', 'game_categories.gameid')
+            ->where('category.categoryid', '=', $categoryid)
+            ->get();
+
+        return json_encode($games);
+    }
+
 }

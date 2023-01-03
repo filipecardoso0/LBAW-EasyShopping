@@ -196,8 +196,6 @@ BEFORE UPDATE ON game
 FOR EACH ROW
 EXECUTE PROCEDURE notifyWishlist();
 
---TODO FIX THIS FUNCTION
--- It is not possible to review a game that hasn't been launched yet
 /*
 CREATE OR REPLACE FUNCTION reviewnotLaunched()
 RETURNS TRIGGER AS
@@ -243,7 +241,6 @@ EXECUTE PROCEDURE reviewPublishedGame();
 
 
 -- It is not possible to review a game that the user hasn't been bought yet
--- TODO FIX THIS FUNCTION
 /*
 CREATE OR REPLACE FUNCTION reviewNotBought()
 RETURNS TRIGGER AS
@@ -270,7 +267,6 @@ FOR EACH ROW
 EXECUTE PROCEDURE reviewNotBought();
 */
 
--- TODO FIX THIS FUNCTION
 -- When a new review on a certain game is posted the game classification is updated
 /*
 CREATE OR REPLACE FUNCTION updateClassification()

@@ -73,7 +73,7 @@
                                     @else
                                         <div class="flex flex-row flex-wrap text-red-500 font-semibold items-center">
                                             <p id="accountstatus">Banned</p>
-                                            <i class="ml-2 fa-solid fa-ban"></i>
+                                            <i id="accountstatusicon" class="ml-2 fa-solid fa-ban"></i>
                                         </div>
                                     @endif
                                 </td>
@@ -81,7 +81,7 @@
                                     <a href="#" onclick="adminDisplayUserActions()">Actions</a>
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                    <a class="hover:underline hover:text-amber-400" href="{{route('adminexactsearchusername')}}?username={{$user->username}}">View More</a>
+                                    <a class="hover:underline hover:text-amber-400" href="{{route('adminexactsearchusername')}}?username={{$user->username}}">View Details</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -140,8 +140,8 @@
                 accountstatus.innerHTML = 'Not Banned'
                 accountstatus.classList.remove('text-red-500')
                 accountstatus.classList.add('text-green-600')
-                accountstatusicon.classList.remove('fa-solid', 'fa-ban', 'text-red-500')
-                accountstatusicon.classList.add('fa-solid', 'fa-circle-check', 'text-green-600')
+                accountstatusicon.classList.remove('fa-ban', 'text-red-500')
+                accountstatusicon.classList.add('fa-circle-check', 'text-green-600')
             }
             else{
                 accountstatus.innerHTML = 'Banned'

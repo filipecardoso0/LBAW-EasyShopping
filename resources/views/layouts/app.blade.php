@@ -163,7 +163,6 @@
                       if(cntr == 8)
                           break
                       //Append to searchresults the games
-                      //TODO ADD IMAGE LOADING USING JS
                       const gamearticle = document.createElement('article')
                       gamearticle.classList.add('flex', 'flex-row', 'flex-wrap', 'items-center', 'py-2', 'border-b-2')
                       let a1 = document.createElement('a')
@@ -173,7 +172,8 @@
                       let a2 = document.createElement('a')
                       let gameimg = document.createElement('img')
                       gameimg.classList.add('w-16', 'h-16', 'ml-2')
-                      let imgurl = ' '
+                      let imgurl = '{{ URL::to('/') }}/images/games/game_'+game.gameid+'.jpg'
+                      gameimg.src = imgurl
                       a2.appendChild(gameimg)
                       a2.href= '{{url('/')}}/details/'+game.gameid
                       gamearticle.appendChild(a1)

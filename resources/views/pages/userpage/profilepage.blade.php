@@ -47,5 +47,8 @@
     </script>
 
     <!-- MODAL FORM -->
+    <section>
+        <input type="text" placeholder="Change Username">
+    </section>
 
 @endsection
