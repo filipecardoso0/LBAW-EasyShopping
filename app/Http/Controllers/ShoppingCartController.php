@@ -39,14 +39,23 @@ class ShoppingCartController extends Controller
         $userid = $request->user()->userid;
         $gameprice = Game::find($gameid)->price;
 
-        //Insert data into the database
-        ShoppingCart::create([
-            'userid' => $userid,
-            'gameid' => $gameid,
-            'game_price' => $gameprice
-        ]);
+        $games = ShoppingCart::where('gameid', '=', $gameid)->where('userid', '=', $userid)->get();
+        if($games->count()){
+            //It has already been added to the user's wishlist
+            //TODO DISPLAY ERROR
+            return 1;
+        }
+        else{
+            //Insert data into the database
+            ShoppingCart::create([
+                'userid' => $userid,
+                'gameid' => $gameid,
+                'game_price' => $gameprice
+            ]);
 
-        return back();
+            return 0;
+        }
+
     }
 
     //Removes a game from the user shopping cart -> User is logged in
@@ -55,7 +64,7 @@ class ShoppingCartController extends Controller
             ->where('userid', '=', auth()->user()->userid)
             ->where('gameid', '=', $request->get('gameid'))
             ->delete();
-        return back();
+
     }
 
     //Creates a shopping Cart using sessions
@@ -74,13 +83,15 @@ class ShoppingCartController extends Controller
         $cart = new ShoppingCartGuest($oldcart);
 
         //Inserts the new game
-        $cart->addItemToCart($game);
+        if($cart->addItemToCart($game) == 1){
+            $request->session()->put('shoppingcart', $cart);
+            return 1;
+        }
 
         //Creates a new session and stores the (new) cart details
         $request->session()->put('shoppingcart', $cart);
 
-        //Goes back to the game page that the user was previously in
-        return back();
+        return 0;
     }
 
     public function removeFromCartGuest(Request $request, int $gameid){
@@ -104,8 +115,6 @@ class ShoppingCartController extends Controller
         //Creates a new session and stores the (new) cart details
         $request->session()->put('shoppingcart', $cart);
 
-        //Goes back to the game page that the user was previously in
-        return back();
     }
 
     /*

@@ -36,7 +36,7 @@ class ShoppingCartGuest extends Model
                 if($item->gameid == $game->gameid){
                     //Game exists
                     //Send back message error
-                    return;
+                    return 1;
                 }
             }
         }

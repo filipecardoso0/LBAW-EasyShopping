@@ -5,6 +5,7 @@ namespace App\Classes;
 //Controllers Import
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GameController;
+use App\Models\Game;
 
 class Overview {
 
@@ -24,5 +25,10 @@ class Overview {
     public function getComingSoon(int $x){
         $gamectrl = new GameController();
         return $gamectrl->getComingSoon($x);
+    }
+
+    //Gets the first X Latest Games
+    public function getLatestGames(int $limit){
+        return Game::getLatestGames($limit);
     }
 }

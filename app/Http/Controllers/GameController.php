@@ -4,85 +4,38 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Game;
+use App\Models\GameCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
-    //TODO: FIX DATABASE CATEGORIES ERROR(GAMES CAN HAVE ONLY 1 CATEGORY)
-    //TODO: CREATE THE NEW PRODUCT_CATEGORIES MODEL
-    //TODO: Add Games Classification in a star manner
-    //TODO: PASSAR AS QUERIES PARA O CONTROLLER(AS QUE FAZEM SENTIDO)
-    //TODO: QUANDO O UTILIZAR DA SIGN IN DEPOIS DO REGISTER NAO SAO ADICIONADOS OS PRODUTOS AO SHOPPING CART
-
     public function index(int $gameid){
         //Queries the database in order to obtain game info of the given gameid
         $game = Game::find($gameid);
+        $gamecategories = GameCategories::getGameCategories($gameid);
 
-        return view('pages.game')
-            ->with('game', $game);
+        return view('pages.gamerelated.game')
+            ->with('game', $game)
+            ->with('categories', $gamecategories);
     }
 
     public function showAll(){
-        $games = Game::orderBy('title')->paginate(12);
-        return view('pages.games')
+        $games = Game::orderBy('title')->get();
+        return view('pages.gamerelated.games')
             ->with('games', $games);
     }
 
     public function showBestSellers(){
-        $games = $this->getBestSellersWithPagination();
-        return view('pages.bestsellers')
+        $games = Game::getBestSellersWithPagination();
+        return view('pages.gamerelated.bestsellers')
             ->with('games', $games);
     }
 
     public function showComingSoon(){
         $games = $this->getComingSoonWithPagination(0);
-        return view('pages.comingsoon')
+        return view('pages.gamerelated.comingsoon')
             ->with('games', $games);
-    }
-
-    //Fetch the info about First x Games with the highest ammount of sales
-    public function getBestSellers(int $x){
-        //Fetches the game info from orders table join with game table in descending order and having state=true(have been bought)
-        if($x > 0){
-            //Select game_order.gameid, count(*) as salesgame from easyshopping.game_order Group by(gameid) Order by salesgame DESC;
-
-            $query = DB::table('game')
-                    ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', (DB::raw('count(*) as salesnum')))
-                    ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
-                    ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
-                    ->where('order_.state', '=', 'true')
-                    ->groupBy('game.gameid')
-                    ->orderByRaw('salesnum DESC')
-                    ->take($x)
-                    ->get();
-            return $query;
-        }
-
-        $query = DB::table('game')
-                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
-                ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
-                ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
-                ->where('order_.state', '=', 'true')
-                ->groupBy('game.gameid', 'order_.state')
-                ->orderByRaw('salesnum DESC')
-                ->get();
-
-        return $query;
-    }
-
-    //Fetches game info from the game with the biggest amount of sales to the one with the least amount of sales
-    public function getBestSellersWithPagination(){
-        $query = DB::table('game')
-                ->select('game.gameid', 'game.title', 'game.price', 'game.discount', 'game.classification', 'game.categoryid', 'order_.state', (DB::raw('count(*) as salesnum')))
-                ->join('game_order', 'game_order.gameid', '=', 'game.gameid')
-                ->join('order_', 'order_.orderid', '=', 'game_order.orderid')
-                ->where('order_.state', '=', 'true')
-                ->groupBy('game.gameid', 'order_.state')
-                ->orderByRaw('salesnum DESC')
-                ->paginate(12);
-
-        return $query;
     }
 
     //Get x games that have not been launched yet but are already available for purchasing (pre-ordering)
@@ -109,8 +62,8 @@ class GameController extends Controller
     /**
      * Shows the search result for games.
      *
-     * @param Request $request 
-     * 
+     * @param Request $request
+     *
      * @return Response
      */
     public function search(Request $request)
@@ -125,6 +78,94 @@ class GameController extends Controller
                 ->paginate(12);
 
         return view('pages.search', ['results' => $games]);
+    }
+
+
+    public function searchAJAX(Request $request, $gametitle)
+    {
+
+        // Get the search value from the request
+        $search = $gametitle;
+
+        $games = Game::query()
+            ->whereRaw('tsvectors @@ plainto_tsquery(\'english\', ?)', "%{$search}%")
+            ->orWhere('title', 'ILIKE', "%{$search}%")
+            ->orderByRaw('ts_rank(tsvectors, plainto_tsquery(\'english\',?)) DESC', "%{$search}%")
+            ->get();
+
+        echo json_encode($games);
+    }
+
+    public static function updateProductStock($gameid){
+
+        $gameinfo = Game::find($gameid);
+
+        $gameinfo->quantity = $gameinfo->quantity-1;
+
+        $updateDetails = [
+            'quantity' => $gameinfo->quantity,
+        ];
+
+        Game::where('gameid', '=', $gameid)
+            ->update($updateDetails);
+    }
+
+    /* FILTER FUNCTIONS */
+
+    public function showGamesHigh2Low(){
+
+        $games = Game::query()->orderByRaw('price DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesLow2High(){
+
+        $games = Game::query()->orderByRaw('price ASC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesbyDiscount(){
+        $games = Game::query()->orderByRaw('discount DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showGamesbyLatestRelease(){
+        $games = Game::query()->orderByRaw('release_date DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function showBestReviewed(){
+        $games = Game::query()->orderByRaw('classification DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameStartingAtPrice($price){
+        $games = Game::query()->where('price', '>=', $price)->orderByRaw('price ASC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameBelowPrice($price){
+        $games = Game::query()->where('price', '<=', $price)->orderByRaw('price DESC')->get();
+
+        return json_encode($games);
+    }
+
+    public function getGameBetweenPrice($pricelow, $pricehigh){
+        $games = Game::query()->where('price', '>=', $pricelow)->where('price', '<=', $pricehigh)->get();
+
+        return json_encode($games);
+    }
+
+    public function showAllGames(){
+        $games = Game::query()->get();
+
+        return json_encode($games);
     }
 
 }
